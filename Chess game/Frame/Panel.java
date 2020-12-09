@@ -16,9 +16,6 @@ public class Panel extends JPanel implements MouseListener ,MouseMotionListener{
 	private static final long serialVersionUID = 1L;
 	Game game;
 	int ti,tj;
-	Image nn = new ImageIcon("nn.png").getImage();
-
-
 	
 	Panel(){
 		this.setFocusable(true);
