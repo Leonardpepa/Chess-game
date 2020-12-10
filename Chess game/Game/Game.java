@@ -30,8 +30,7 @@ public class Game {
 	static Queen queenB;
 	static King kingW;
 	static King kingB;
-	static ArrayList<Piece> Wpieces = new ArrayList<Piece>();
-	static ArrayList<Piece> Bpieces = new ArrayList<Piece>();
+
 	
 	String player = "white";
 	Piece activeWhitePiece = null;
@@ -51,14 +50,6 @@ public class Game {
 		 rookB2 = new Rook(0, 0, false, board);
 		 queenB = new Queen(3, 0, false, board);
 		 kingB = new King(4, 0, false, board);
-		 Bpieces.add(kingB);
-		 Bpieces.add(queenB);
-		 Bpieces.add(knightB1);
-		 Bpieces.add(knightB2);
-		 Bpieces.add(rookB1);
-		 Bpieces.add(rookB2);
-		 Bpieces.add(bishopB1);
-		 Bpieces.add(bishopB1);
 		 
 		 
 	
@@ -70,14 +61,7 @@ public class Game {
 		bishopW2 = new Bishop(5, 7, true, board);
 		queenW = new Queen(3, 7, true, board);
 		kingW = new King(4, 7, true, board);
-		Wpieces.add(rookW1);
-		Wpieces.add(rookW2);
-		Wpieces.add(bishopW1);
-		Wpieces.add(bishopW2);
-		Wpieces.add(knightW1);
-		Wpieces.add(knightW2);
-		Wpieces.add(queenW);
-		Wpieces.add(kingW);
+
 		
 	}
 
@@ -123,72 +107,7 @@ public class Game {
     	
     }
     
-    public static boolean isPiecePRotected(int x, int y) {
-    	Piece piece = board.getPiece(x, y);
-    	if(piece != null) {
-	    	if(piece.isWhite()) {
-	    		for(int i=0; i<Wpieces.size(); i++) {
-	    			if(Wpieces.get(i).equals(piece)) {
-	    				continue;
-	    			}
-	    			else {
-	    				if(Wpieces.get(i).canMove(x, y)) {
-	    					return true;
-	    				}
-	    			}
-	    			if(pawnW[i].capture(x, y)) {
-	    				return true;
-	    			}
-	    		}
-	    		
-	    	}
-	    	else {
-	    		for(int i=0; i<Bpieces.size(); i++) {
-	    			if(Bpieces.get(i).equals(piece)) {
-	    				continue;
-	    			}
-	    			else {
-	    				if(Bpieces.get(i).canMove(x, y)) {
-	    					return true;
-	    				}
-	    			}
-	    			if(pawnB[i].capture(x, y)) {
-	    				return true;
-	    			}
-	    		}
-	    		
-	    	}
-    	}
-    	return false;
-    	
-    }
-    
-    public static boolean isSquareAttacked(int x,int y,boolean iswhite) {
-    	if(!iswhite) {
-    		for(int i=0; i<Wpieces.size(); i++) {
-    			if(Wpieces.get(i).canMove(x, y)) {
-    				return true;
-    			}
-    			if(pawnW[i].capture(x, y)) {
-    				return true;
-    			}    			
-    		}
-    	}
-    	else{
-    		for(int i=0; i<Bpieces.size(); i++) {
-    			if(Bpieces.get(i).canMove(x, y)) {
-    				return true;
-    			}
-    			if(pawnB[i].capture(x, y)) {
-    				return true;
-    			}    			
-    		}
-    	}
-    	return false;
-    }
-    
-    
-	
+
 	public void drawBoard(Graphics g) {
 			
 			for(int i=0; i<8; i++) {
