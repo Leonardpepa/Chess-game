@@ -92,8 +92,7 @@ public class Pawn extends Piece {
 					}
 					if(y == yCord+1 && x == xCord-1 ) {
 							return true;
-					}
-				
+					}			
 			}
 
 		return false;

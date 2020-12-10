@@ -22,12 +22,21 @@ public class Knight extends Piece{
 	
 	
 	
+	public boolean makeMove(int toX,int toY) {
+		if(canMove(toX, toY) && alive() && board.getXY(toX, toY) != valueInTheBoard) {
+			board.updatePieces(xCord, yCord, toX, toY,this);
+			xCord = toX;
+			yCord = toY;
+			return true;
+		}
+		return false;
+		
+	}
 
 	
 	public boolean canMove(int x ,int y) {
 			if(x == xCord+1 && y == yCord-2 ) {
 				return true;
-				
 			}
 			if(x == xCord-1 && y == yCord-2 ) {
 				return true;	
@@ -52,24 +61,12 @@ public class Knight extends Piece{
 			if(x == xCord-2 && y == yCord+1 ) {
 				return true;	
 			}
-		
-		
-		
+	
 		return false;
 	}
 	
 	
 	
-	public boolean makeMove(int toX,int toY) {
-		if(canMove(toX, toY) && alive() && board.getXY(toX, toY) != valueInTheBoard) {
-			board.updatePieces(xCord, yCord, toX, toY,this);
-			xCord = toX;
-			yCord = toY;
-			return true;
-		}
-		return false;
-		
-	}
 
 	@Override
 	public boolean alive() {
