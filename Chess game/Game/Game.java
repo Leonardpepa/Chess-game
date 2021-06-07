@@ -4,62 +4,66 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+
 import javax.swing.SwingUtilities;
 
 
 public class Game {
 	static Board board = new Board();
-	static Pawn[] pawnW = new Pawn[8];
-	static Pawn[] pawnB = new Pawn[8];
-	static Knight knightW1;
-	static Knight knightW2;
-	static Bishop bishopW1;
-	static Bishop bishopW2;
-	static Rook rookW2;
-	static Rook rookW1;
-	static Queen queenW;
-	static Knight knightB1;
-	static Knight knightB2;
-	static Bishop bishopB1;
-	static Bishop bishopB2;
-	static Rook rookB1;
-	static Rook rookB2;
-	static Queen queenB;
-	static King kingW;
-	static King kingB;
+	static Piece[] pawnW = new Pawn[8];
+	static Piece[] pawnB = new Pawn[8];
+	static Piece knightW1;
+	static Piece knightW2;
+	static Piece bishopW1;
+	static Piece bishopW2;
+	static Piece rookW2;
+	static Piece rookW1;
+	static Piece queenW;
+	static Piece knightB1;
+	static Piece knightB2;
+	static Piece bishopB1;
+	static Piece bishopB2;
+	static Piece rookB1;
+	static Piece rookB2;
+	static Piece queenB;
+	static Piece kingW;
+	static Piece kingB;
 
 	
 	String player = "white";
-	Piece activeWhitePiece = null;
-	Piece activeBlckPiece = null;
 	Piece active = null;
 	boolean isSelected = false;
+	static ArrayList<Piece>  AllPieces = new ArrayList<Piece>();
+	
+	ArrayList<Move> allPossiblesMoves = new ArrayList<Move>();
+	
 	
 	public Game() {
 		for(int i=0; i<8; i++) {
-			pawnW[i] = new Pawn(i,6,true,board);
-			pawnB[i] = new Pawn(i,1,false,board);
+			pawnW[i] = new Pawn(i,6,true,board, 1);
+			pawnB[i] = new Pawn(i,1,false,board, -1);
 		}
-		 knightB1 = new Knight(6, 0, false, board);
-		 knightB2 = new Knight(1, 0, false, board);
-		 bishopB1 = new Bishop(5, 0, false, board);
-		 bishopB2 = new Bishop(2, 0, false, board);
-		 rookB1 = new Rook(7, 0, false, board);
-		 rookB2 = new Rook(0, 0, false, board);
-		 queenB = new Queen(3, 0, false, board);
-		 kingB = new King(4, 0, false, board);
+		 knightB1 = new Knight(6, 0, false, board, -3);
+		 knightB2 = new Knight(1, 0, false, board, -3);
+		 bishopB1 = new Bishop(5, 0, false, board, -3);
+		 bishopB2 = new Bishop(2, 0, false, board, -3);
+		 rookB1 = new Rook(7, 0, false, board, -5);
+		 rookB2 = new Rook(0, 0, false, board, -5);
+		 queenB = new Queen(3, 0, false, board, -8);
+		 kingB = new King(4, 0, false, board, -100);
 		 
 		 
 	
-		rookW1 = new Rook(7, 7, true, board);
-		rookW2 = new Rook(0, 7, true, board);
-		knightW1 = new Knight(1, 7, true, board);
-		knightW2 = new Knight(6, 7, true, board);
-		bishopW1 = new Bishop(2, 7, true, board);
-		bishopW2 = new Bishop(5, 7, true, board);
-		queenW = new Queen(3, 7, true, board);
-		kingW = new King(4, 7, true, board);
-
+		rookW1 = new Rook(7, 7, true, board, 5);
+		rookW2 = new Rook(0, 7, true, board, 5);
+		knightW1 = new Knight(1, 7, true, board, 3);
+		knightW2 = new Knight(6, 7, true, board, 3);
+		bishopW1 = new Bishop(2, 7, true, board, 3);
+		bishopW2 = new Bishop(5, 7, true, board, 3);
+		queenW = new Queen(3, 7, true, board, 8);
+		kingW = new King(4, 7, true, board, 100);
+		
 		
 	}
 
@@ -88,7 +92,6 @@ public class Game {
 					active = null;
 					isSelected = false;
 					player = player.equals("white") ? "black" : "white";
-					System.out.println(player);
 				}
 				else{
 					if(board.getPiece(x, y)!=null && board.getPiece(x, y).isWhite() && player.equals("white")){
@@ -99,46 +102,7 @@ public class Game {
 					}
 				}
 			}
-			
 
-			
-
-		
-		
-		
-			// 	if(player.equalsIgnoreCase("white")) {
-		// 		System.out.println("is " + player + "'s move");
-		// 		if(activeWhitePiece!=null && activeWhitePiece.isWhite()) {
-		// 			if(activeWhitePiece.makeMove(x, y)) {
-		// 				player = "black";
-		// 				activeWhitePiece = null;
-		// 				activeBlckPiece = null;
-		// 			}
-		// 			else {
-		// 				activeWhitePiece = board.getPiece(x, y);
-		// 			}
-					
-		// 		}
-		// 		else {
-		// 			activeWhitePiece = board.getPiece(x, y);
-		// 			}	
-		// 	}
-			
-		// 	if(player.equalsIgnoreCase("black")) {
-		// 		if(activeBlckPiece!=null && !activeBlckPiece.isWhite())
-		// 		{
-		// 			if(activeBlckPiece.makeMove(x, y)){
-		// 				player = "white";
-		// 				activeWhitePiece = null;
-		// 				activeBlckPiece = null;
-		// 			} else {
-		// 				activeBlckPiece = board.getPiece(x, y);
-		// 			}
-		// 		}
-		// 		else {
-		// 			activeBlckPiece = board.getPiece(x, y);
-		// 		}
-		// 	}
 		}
     	
     }
@@ -162,15 +126,6 @@ public class Game {
 		Graphics2D g2 = (Graphics2D)g;
 		g2.setColor(Color.BLACK);
 		g2.setStroke(new BasicStroke(2));
-		// if(activeWhitePiece != null && player.equals("white")) {
-		// 	g2.drawRect(activeWhitePiece.getXcord()*Piece.size, activeWhitePiece.getYcord()*Piece.size,Piece.size,Piece.size);
-		// 	activeWhitePiece.showMoves(g);
-		// }
-		
-		// if(activeBlckPiece != null && player.equals("black")) {
-		// 	g2.drawRect(activeBlckPiece.getXcord()*Piece.size, activeBlckPiece.getYcord()*Piece.size, Piece.size, Piece.size);
-		// 	activeBlckPiece.showMoves(g);
-		// }
 
 		if(active != null){
 			active.showMoves(g);
@@ -207,10 +162,29 @@ public class Game {
 		kingW.draw(g);
 		
 	}
-
-	// public Piece searchPiece(int x, int y){
-
-	// }
+	
+	public void fillAllPieces(){
+		for(int i=0; i<8; i++) {
+			AllPieces.add(pawnB[i]);
+			AllPieces.add(pawnW[i]);
+		}
+		AllPieces.add(queenW);
+		AllPieces.add(queenB);
+		AllPieces.add(kingW);
+		AllPieces.add(kingB);
+		AllPieces.add(rookW1);
+		AllPieces.add(rookW2);
+		AllPieces.add(rookB1);
+		AllPieces.add(rookB2);
+		AllPieces.add(bishopW2);
+		AllPieces.add(bishopW1);
+		AllPieces.add(bishopB1);
+		AllPieces.add(bishopB2);
+		AllPieces.add(knightB1);
+		AllPieces.add(knightB2);
+		AllPieces.add(knightW1);
+		AllPieces.add(knightW2);
+	}
 	
 	
 }

@@ -13,8 +13,7 @@ public class Board {
 	
 	public void setPieceIntoBoard(int x,int y,Piece piece) {
 		grid[x][y] = piece.getValueInTheboard();
-		System.out.println(piece);
-		pieces[piece.getXcord()][piece.getYcord()] = piece; 
+		pieces[x][y] = piece; 
 	}
 	public void yes(int fromX,int fromY,int toX,int toY,Piece piece) {
 		pieces[fromX][fromY] = null;

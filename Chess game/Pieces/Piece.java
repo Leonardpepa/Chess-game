@@ -14,23 +14,32 @@ public abstract class Piece {
 
 	abstract boolean makeMove(int toX,int toY);
 	public abstract boolean canMove(int x ,int y);
-	public abstract void intializeSide();
 	public abstract boolean alive();
 	
-	public Piece(int x,int y,boolean iswhite,Board board) {
+	public void intializeSide(int value){
+		if(isWhite) {
+			pieceColor = PieceImages.WHITECOLOR;
+		}
+		else {
+			pieceColor = PieceImages.BLACKCOLOR;
+		}
+		valueInTheBoard = value;
+	};
+	
+	public Piece(int x,int y,boolean iswhite,Board board, int value) {
 		this.xCord = x;
 		this.yCord = y;
 		this.isWhite = iswhite;
 		isAlive = true;
 		this.board = board;
-		intializeSide();
+		intializeSide(value);
 		board.setPieceIntoBoard(x, y, this);
 	}
 	public void showMoves(Graphics g) {
 		g.setColor(Color.CYAN);
 		for(int i=0; i<8; i++) {
     		for(int j=0; j<8; j++) {
-    			if(this.canMove(i, j) && board.getXY(i, j) != valueInTheBoard) {
+    			if(this.canMove(i, j) && (board.getPiece(i, j)== null || board.getPiece(i, j).isWhite() != isWhite())) {
     				g.drawRect(i*size, j*size, size, size);
     			}
     		}

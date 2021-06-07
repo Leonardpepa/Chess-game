@@ -4,14 +4,18 @@ public class Rook extends Piece {
 	
 	private boolean hasMoved;
 
-	public Rook(int x, int y, boolean iswhite, Board board) {
-		super(x, y, iswhite, board);
+	public Rook(int x, int y, boolean iswhite, Board board, int value) {
+		super(x, y, iswhite, board, value);
 		hasMoved = false;
+		this.pieceImage = PieceImages.ROOK;
 	}
 
 	@Override
 	boolean makeMove(int toX, int toY) {
-		if(canMove(toX, toY) && alive() && board.getXY(toX, toY) != valueInTheBoard) {
+		if(!alive()) {
+			return false;
+		}
+		if(canMove(toX, toY)) {
 			board.updatePieces(xCord, yCord, toX, toY,this);
 			xCord = toX;
 			yCord = toY;
@@ -24,6 +28,10 @@ public class Rook extends Piece {
 
 	@Override
 	public boolean canMove(int x, int y) {
+		
+			if(board.getPiece(x, y) != null && board.getPiece(x, y).isWhite() == isWhite()) {
+				return false;
+			}
 		
 			if(x == xCord && (y<yCord )) {
 					for(int i=yCord-1; i>y;i--) {
@@ -63,26 +71,6 @@ public class Rook extends Piece {
 		return false;
 		
 	}
-	
-	
-
-
-	@Override
-	public void intializeSide() {
-		if(isWhite) {
-			valueInTheBoard = 1;
-			pieceImage = PieceImages.ROOK;
-			pieceColor = PieceImages.WHITECOLOR;
-		}
-		else {
-			valueInTheBoard = 2;
-			pieceImage = PieceImages.ROOK;
-			pieceColor = PieceImages.BLACKCOLOR;
-		}
-		
-	}
-
-
 
 	public boolean HasMoved() {
 		return hasMoved;
