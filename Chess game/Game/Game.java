@@ -63,7 +63,7 @@ public class Game {
 		bishopW2 = new Bishop(5, 7, true, board, 3);
 		queenW = new Queen(3, 7, true, board, 8);
 		kingW = new King(4, 7, true, board, 100);
-		
+		fillAllPieces();
 		
 	}
 
