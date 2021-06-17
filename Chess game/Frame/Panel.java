@@ -1,21 +1,23 @@
 
+import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Graphics;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 
 import javax.swing.JPanel;
 
-public class Panel extends JPanel implements MouseListener ,MouseMotionListener{
+public class Panel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	Game game;
 	int ti,tj;
+	int xx, yy;
 	
 	Panel(){
 		this.setFocusable(true);
-		this.addMouseListener(this);
-		this.addMouseMotionListener(this);
+		this.addMouseListener(new Listener());
+		this.addMouseMotionListener(new Listener());
 		game = new Game();
 
 	}
@@ -25,68 +27,61 @@ public class Panel extends JPanel implements MouseListener ,MouseMotionListener{
 		game.drawBoard(g);
 		game.drawPiece(g);
 		game.drawPossibleMoves(g);
+		g.setColor(Color.BLACK);
 		g.drawRect(ti*Piece.size, tj*Piece.size, Piece.size, Piece.size);
-	
+		game.dragAndDrop(game.active,xx, yy ,g);
 	}
 	
 
-	
-	
-	
-
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		
-		
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		game.Play(e);
-		repaint();
-		System.out.println();
-		for(int j=0;j<8;j++) {
-			for(int i=0;i<8;i++) {
-				System.out.print(Game.board.getXY(i, j) + " ");
-			}
-			System.out.println();
+	class Listener extends MouseAdapter{
+		@Override
+		public void mouseClicked(MouseEvent e) {
+//			game.Play(e);
+			revalidate();
+			repaint();
+			
 		}
 		
-	
+		@Override
+		public void mouseMoved(MouseEvent e) {
+			ti = e.getX()/Piece.size;
+			tj = e.getY()/Piece.size;
+			if(Game.board.getPiece(e.getX()/Piece.size, e.getY()/Piece.size) != null) {
+				setCursor(new Cursor(Cursor.HAND_CURSOR));
+			}
+			else {
+				setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+			revalidate();
+			repaint();
+		}
 		
-	
-}
-
-	@Override
-	public void mouseDragged(MouseEvent e) {
+		@Override
+		public void mouseDragged(MouseEvent e) {
+			Game.drag = true;
+			game.selectPiece(e.getX()/Piece.size, e.getY()/Piece.size);
+			xx = e.getX();
+			yy = e.getY();
+			repaint();
+		}
+		
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			int x = e.getX() / Piece.size;
+			int y = e.getY() / Piece.size;
+			
+			if(game.active!=null && game.active.makeMove(x, y)) {
+				System.out.println("moved");
+			}
+			Game.drag = false;
+			game.active  = null;
+			setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+		}
+		
+		
 		
 	}
-
-	@Override
-	public void mouseMoved(MouseEvent e) {
-		ti = e.getX()/Piece.size;
-		tj = e.getY()/Piece.size;
-		repaint();
-		
-	}
+	
 
 	
 	

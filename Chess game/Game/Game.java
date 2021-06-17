@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 import javax.swing.SwingUtilities;
 
-
 public class Game {
 	static Board board = new Board();
 	static Piece[] pawnW = new Pawn[8];
@@ -30,31 +29,28 @@ public class Game {
 	static Piece kingW;
 	static Piece kingB;
 
-	
 	String player = "white";
 	Piece active = null;
 	boolean isSelected = false;
-	static ArrayList<Piece>  AllPieces = new ArrayList<Piece>();
-	
+	static ArrayList<Piece> AllPieces = new ArrayList<Piece>();
+
 	ArrayList<Move> allPossiblesMoves = new ArrayList<Move>();
-	
-	
+	public static boolean drag = false;
+
 	public Game() {
-		for(int i=0; i<8; i++) {
-			pawnW[i] = new Pawn(i,6,true,board, 1);
-			pawnB[i] = new Pawn(i,1,false,board, -1);
+		for (int i = 0; i < 8; i++) {
+			pawnW[i] = new Pawn(i, 6, true, board, 1);
+			pawnB[i] = new Pawn(i, 1, false, board, -1);
 		}
-		 knightB1 = new Knight(6, 0, false, board, -3);
-		 knightB2 = new Knight(1, 0, false, board, -3);
-		 bishopB1 = new Bishop(5, 0, false, board, -3);
-		 bishopB2 = new Bishop(2, 0, false, board, -3);
-		 rookB1 = new Rook(7, 0, false, board, -5);
-		 rookB2 = new Rook(0, 0, false, board, -5);
-		 queenB = new Queen(3, 0, false, board, -8);
-		 kingB = new King(4, 0, false, board, -100);
-		 
-		 
-	
+		knightB1 = new Knight(6, 0, false, board, -3);
+		knightB2 = new Knight(1, 0, false, board, -3);
+		bishopB1 = new Bishop(5, 0, false, board, -3);
+		bishopB2 = new Bishop(2, 0, false, board, -3);
+		rookB1 = new Rook(7, 0, false, board, -5);
+		rookB2 = new Rook(0, 0, false, board, -5);
+		queenB = new Queen(3, 0, false, board, -8);
+		kingB = new King(4, 0, false, board, -100);
+
 		rookW1 = new Rook(7, 7, true, board, 5);
 		rookW2 = new Rook(0, 7, true, board, 5);
 		knightW1 = new Knight(1, 7, true, board, 3);
@@ -64,35 +60,33 @@ public class Game {
 		queenW = new Queen(3, 7, true, board, 8);
 		kingW = new King(4, 7, true, board, 100);
 		fillAllPieces();
-		
+
 	}
 
-    public void Play(MouseEvent e) {
-    	
-    	if(SwingUtilities.isLeftMouseButton(e)) {
-			int x = e.getX()/Piece.size;
-			int y = e.getY()/Piece.size;
-			
+	public void Play(MouseEvent e) {
+		int x = e.getX() / Piece.size;
+		int y = e.getY() / Piece.size;
 
-			if(!isSelected){
+		if (SwingUtilities.isLeftMouseButton(e) && !drag) {
+
+			if (!isSelected) {
 				active = board.getPiece(x, y);
-				if(active!= null){
-					if(active.isWhite() && player.equals("black") || !active.isWhite() && player.equals("white")){
+				if (active != null) {
+					if (active.isWhite() && player.equals("black") || !active.isWhite() && player.equals("white")) {
 						isSelected = false;
 						active = null;
-					}
-					else{
+					} else {
 						isSelected = true;
 						active.fillAllPossibleMoves();
-						
+
 					}
-				}	
+				}
 			}
 
-			if(isSelected && (x!=active.getXcord() || y!=active.getYcord())){
-				if(active.makeMove(x, y)){
-					if(active instanceof Pawn) {
-						if(active.isWhite() && active.yCord == 0) {
+			if (isSelected && (x != active.getXcord() || y != active.getYcord())) {
+				if (active.makeMove(x, y)) {
+					if (active instanceof Pawn) {
+						if (active.isWhite() && active.yCord == 0) {
 							AllPieces.remove(active);
 							active = new Queen(active.getXcord(), active.getYcord(), active.isWhite(), board, 8);
 							AllPieces.add(active);
@@ -101,59 +95,64 @@ public class Game {
 					player = player.equals("white") ? "black" : "white";
 					active = null;
 					isSelected = false;
-				}
-				else{
+				} else {
 					active = null;
 					isSelected = false;
-//					if(board.getPiece(x, y)!=null && board.getPiece(x, y).isWhite() && player.equals("white")){
-//						active = board.getPiece(x, y);
-//					}
-//					if(board.getPiece(x, y)!=null && !board.getPiece(x, y).isWhite() && player.equals("black")){
-//						active = board.getPiece(x, y);
-//					}
 				}
-				
+
 			}
 
 		}
-    	
-    }
-    
+	}
 
+	
+	public void selectPiece(int x, int y) {
+		if(active == null) {
+			active = board.getPiece(x, y);
+		}
+	}
+	
+	public void dragAndDrop(Piece piece, int x, int y, Graphics g) {
+		if(piece!=null && drag == true) {
+			piece.fillAllPossibleMoves();
+			piece.draw2(g, true, x, y);			
+		}
+	}
+	
 	public void drawBoard(Graphics g) {
-			for(int i=0; i<8; i++) {
-				for(int j=0; j<8; j++) {
-					if((i+j)%2 == 1) {
-						g.setColor(new Color(113, 144, 58));
-					}
-					else {
-						g.setColor(new Color(182, 142, 96));
-					}
-					g.fillRect(i*Piece.size, j*Piece.size, Piece.size, Piece.size);
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				if ((i + j) % 2 == 1) {
+					g.setColor(new Color(113, 144, 58));
+				} else {
+					g.setColor(new Color(182, 142, 96));
 				}
+				g.fillRect(i * Piece.size, j * Piece.size, Piece.size, Piece.size);
 			}
 		}
+	}
+
 	public void drawPossibleMoves(Graphics g) {
-		Graphics2D g2 = (Graphics2D)g;
+		Graphics2D g2 = (Graphics2D) g;
 		g2.setColor(Color.BLACK);
 		g2.setStroke(new BasicStroke(2));
 
-		if(active != null){
+		if (active != null) {
 			active.showMoves(g);
 		}
-		
+
 	}
 
 	public void drawPiece(Graphics g) {
-		g.setFont(new Font(Font.SANS_SERIF,Font.BOLD,75));
-		for(Piece p: AllPieces) {
-			p.draw(g);
+		g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 75));
+		for (Piece p : AllPieces) {
+			p.draw(g, false);
 		}
-		
+
 	}
-	
-	public void fillAllPieces(){
-		for(int i=0; i<8; i++) {
+
+	public void fillAllPieces() {
+		for (int i = 0; i < 8; i++) {
 			AllPieces.add(pawnB[i]);
 			AllPieces.add(pawnW[i]);
 		}
@@ -174,6 +173,5 @@ public class Game {
 		AllPieces.add(knightW1);
 		AllPieces.add(knightW2);
 	}
-	
-	
+
 }

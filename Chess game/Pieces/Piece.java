@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
@@ -69,10 +70,26 @@ public abstract class Piece {
 	}
 	
 	
-	public void draw(Graphics g) {
+	public void draw(Graphics g, boolean drag) {
 		if(this.alive()) {
 			g.setColor(pieceColor);
-			g.drawString(this.pieceImage, this.xCord*size, (this.yCord+1)*size-10);
+			if(drag) {
+				g.drawString(this.pieceImage, this.xCord, this.yCord);
+			}else {
+				g.drawString(this.pieceImage, this.xCord*size, (this.yCord+1)*size-10);				
+			}
+		}
+	}
+	
+	public void draw2(Graphics g, boolean drag, int x, int y) {
+		if(this.alive()) {
+			g.setColor(pieceColor);
+			if(drag) {
+				g.setFont(new Font(Font.DIALOG, Font.BOLD, 85));
+				g.drawString(this.pieceImage, x - Piece.size/2, y + Piece.size/2);
+			}else {
+				g.drawString(this.pieceImage, this.xCord*size, (this.yCord+1)*size-10);				
+			}
 		}
 	}
 	
