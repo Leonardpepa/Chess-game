@@ -3,30 +3,30 @@ import java.awt.Graphics;
 
 public class Pawn extends Piece {
 	private boolean firstMove;
-	private boolean hasReachedTheEnd;
 
 	public Pawn(int x, int y, boolean iswhite, Board board, int value) {
 		super(x, y, iswhite, board, value);
 		firstMove = true;
-		hasReachedTheEnd = false;
 		this.pieceImage = PieceImages.PAWN;
 	}
 
-	public boolean makeMove(int toX, int toY) {
-
-		if (!alive()) {
+	@Override
+	boolean makeMove(int toX, int toY) {
+		Move move = new Move(xCord, yCord, toX, toY);
+		if(!alive()) {
 			return false;
 		}
-
-		if (canMove(toX, toY)) {
-			board.updatePieces(xCord, yCord, toX, toY, this);
-			xCord = toX;
-			yCord = toY;
-			firstMove = false;
-			return true;
+		for(Move m: moves) {
+			if(m.compareTo(move) == 0) {
+				board.updatePieces(xCord, yCord, toX, toY,this);
+				xCord = toX;
+				yCord = toY;
+				firstMove = false;
+				return true;
+			}
 		}
 		return false;
-
+		
 	}
 
 	public boolean canMove(int x, int y) {
@@ -104,14 +104,6 @@ public class Pawn extends Piece {
 
 	public void setFirstMove(boolean firstMove) {
 		this.firstMove = firstMove;
-	}
-
-	public boolean isHasReachedTheEnd() {
-		return hasReachedTheEnd;
-	}
-
-	public void setHasReachedTheEnd(boolean hasReachedTheEnd) {
-		this.hasReachedTheEnd = hasReachedTheEnd;
 	}
 
 }

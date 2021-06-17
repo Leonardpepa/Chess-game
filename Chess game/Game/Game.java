@@ -68,6 +68,7 @@ public class Game {
 	}
 
     public void Play(MouseEvent e) {
+    	
     	if(SwingUtilities.isLeftMouseButton(e)) {
 			int x = e.getX()/Piece.size;
 			int y = e.getY()/Piece.size;
@@ -82,25 +83,36 @@ public class Game {
 					}
 					else{
 						isSelected = true;
+						active.fillAllPossibleMoves();
+						
 					}
 				}	
 			}
 
 			if(isSelected && (x!=active.getXcord() || y!=active.getYcord())){
-
 				if(active.makeMove(x, y)){
+					if(active instanceof Pawn) {
+						if(active.isWhite() && active.yCord == 0) {
+							AllPieces.remove(active);
+							active = new Queen(active.getXcord(), active.getYcord(), active.isWhite(), board, 8);
+							AllPieces.add(active);
+						}
+					}
+					player = player.equals("white") ? "black" : "white";
 					active = null;
 					isSelected = false;
-					player = player.equals("white") ? "black" : "white";
 				}
 				else{
-					if(board.getPiece(x, y)!=null && board.getPiece(x, y).isWhite() && player.equals("white")){
-						active = board.getPiece(x, y);
-					}
-					if(board.getPiece(x, y)!=null && !board.getPiece(x, y).isWhite() && player.equals("black")){
-						active = board.getPiece(x, y);
-					}
+					active = null;
+					isSelected = false;
+//					if(board.getPiece(x, y)!=null && board.getPiece(x, y).isWhite() && player.equals("white")){
+//						active = board.getPiece(x, y);
+//					}
+//					if(board.getPiece(x, y)!=null && !board.getPiece(x, y).isWhite() && player.equals("black")){
+//						active = board.getPiece(x, y);
+//					}
 				}
+				
 			}
 
 		}
@@ -109,7 +121,6 @@ public class Game {
     
 
 	public void drawBoard(Graphics g) {
-			
 			for(int i=0; i<8; i++) {
 				for(int j=0; j<8; j++) {
 					if((i+j)%2 == 1) {
@@ -135,31 +146,9 @@ public class Game {
 
 	public void drawPiece(Graphics g) {
 		g.setFont(new Font(Font.SANS_SERIF,Font.BOLD,75));
-		for(int i=0; i<8; i++) {
-			pawnW[i].draw(g);
-			pawnB[i].draw(g);
+		for(Piece p: AllPieces) {
+			p.draw(g);
 		}
-		rookB1.draw(g);
-		rookB2.draw(g);
-		rookW1.draw(g);
-		rookW2.draw(g);
-		
-		bishopB1.draw(g);
-		bishopB2.draw(g);
-		bishopW1.draw(g);
-		bishopW2.draw(g);
-		
-		knightB1.draw(g);
-		knightB2.draw(g);
-		knightW1.draw(g);
-		knightW2.draw(g);
-
-		
-		queenB.draw(g);
-		queenW.draw(g);
-		
-		kingB.draw(g);
-		kingW.draw(g);
 		
 	}
 	

@@ -10,18 +10,7 @@ public class Board {
 		pieces = new Piece[ROWS][COLUMNS];
 	}
 	
-	public boolean isAttacked(int x, int y, boolean isWhite) {
-		for(Piece p: Game.AllPieces) {
-			if(p.isWhite() == isWhite) {
-				continue;
-			}
-			if(p.canMove(x, y)) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
+
 	public void setPieceIntoBoard(int x,int y,Piece piece) {
 		grid[x][y] = piece.getValueInTheboard();
 		pieces[x][y] = piece; 

@@ -1,5 +1,5 @@
 
-public class Move {
+public class Move implements Comparable<Move>{
 	int fromX, fromY, toX, toY;
 
 	public Move(int fromX, int fromY, int toX, int toY) {
@@ -39,6 +39,14 @@ public class Move {
 
 	public void setToY(int toY) {
 		this.toY = toY;
+	}
+
+	@Override
+	public int compareTo(Move o) {
+		if(toX == o.getToX() && toY == o.getToY()) {
+			return 0;
+		}
+		return -1;
 	}
 	
 	

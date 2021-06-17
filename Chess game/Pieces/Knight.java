@@ -6,23 +6,7 @@ public class Knight extends Piece{
 		super(x, y, iswhite, board, value);
 		this.pieceImage = PieceImages.KNIGHT;
 	}
-	
-	public boolean makeMove(int toX,int toY) {
-		
-		if(!alive()) {
-			return false;
-		}
-		if(canMove(toX, toY)) {
-			board.updatePieces(xCord, yCord, toX, toY,this);
-			xCord = toX;
-			yCord = toY;
-			return true;
-		}
-		return false;
-		
-	}
 
-	
 	public boolean canMove(int x ,int y) {
 			
 			if((board.getPiece(x, y) != null && board.getPiece(x, y).isWhite() == isWhite())) {

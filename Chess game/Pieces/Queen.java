@@ -1,3 +1,8 @@
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Queen extends Piece {
 
@@ -5,21 +10,9 @@ public class Queen extends Piece {
 		super(x, y, iswhite, board, value);
 		this.pieceImage = PieceImages.QUEEN;
 	}
+	
 
-	@Override
-	boolean makeMove(int toX, int toY) {
-		if(!alive()) {
-			return false;
-		}
-		if(canMove(toX, toY)) {
-			board.updatePieces(xCord, yCord, toX, toY,this);
-			xCord = toX;
-			yCord = toY;
-			return true;
-		}
-		return false;
-		
-	}
+	
 
 
 	@Override

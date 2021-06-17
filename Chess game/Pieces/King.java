@@ -4,6 +4,7 @@ import java.awt.Graphics;
 public class King extends Piece {
 	private boolean hasMoved;
 	private boolean hasCastled;
+	
 	public King(int x, int y, boolean iswhite, Board board, int value) {
 		super(x, y, iswhite, board, value);
 		hasMoved = false;
@@ -33,9 +34,6 @@ public class King extends Piece {
 		int j = Math.abs(yCord - y);
 		
 		if( j == 1 && i == 1 || (i+j) == 1) {
-			if(board.isAttacked(x, y, isWhite())) {
-				return false;
-			}
 			
 			if(board.getPiece(x, y) == null) {
 				return true;
@@ -49,7 +47,10 @@ public class King extends Piece {
 
 	@Override
 	public boolean alive() {
-		return  true;
+		if(board.getXY(xCord, yCord) != valueInTheBoard || board.getXY(xCord, yCord) == 0 ) {
+			isAlive = false;
+		}
+		return isAlive;
 	}
 
 

@@ -10,20 +10,6 @@ public class Bishop extends Piece {
 	}
 
 	@Override
-	boolean makeMove(int toX, int toY) {
-		if(!alive()) {
-			return false;
-		}
-		if(canMove(toX, toY)) {
-			board.updatePieces(xCord, yCord, toX, toY,this);
-			xCord = toX;
-			yCord = toY;
-			return true;
-		}
-		return false;
-	}
-
-	@Override
 	public boolean canMove(int x, int y) {
 			
 			if(board.getPiece(x, y) != null && board.getPiece(x, y).isWhite() == isWhite()) {
