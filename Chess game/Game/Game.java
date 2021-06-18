@@ -110,7 +110,7 @@ public class Game {
 	
 	public void move(int x, int y) {
 		if(active != null) {
-			if(active.makeMove(x, y)) {
+			if(active.makeMove(x, y, board)) {
 				tryToPromote(active);
 				changeSide();
 			}

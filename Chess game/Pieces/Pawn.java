@@ -11,7 +11,7 @@ public class Pawn extends Piece {
 	}
 
 	@Override
-	boolean makeMove(int toX, int toY) {
+	boolean makeMove(int toX, int toY, Board sboard) {
 		Move move = new Move(xCord, yCord, toX, toY);
 		if(!alive()) {
 			return false;

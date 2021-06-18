@@ -13,21 +13,6 @@ public class King extends Piece {
 	}
 
 	@Override
-	boolean makeMove(int toX, int toY) {
-		if(!alive()) {
-			return false;
-		}
-		if(canMove(toX, toY)) {
-				board.updatePieces(xCord, yCord, toX, toY,this);
-				xCord = toX;
-				yCord = toY;
-				hasMoved = true;
-				return true;
-		}
-		return false;
-	}
-
-	@Override
 	public boolean canMove(int x, int y) {
 		
 		int i = Math.abs(xCord - x);

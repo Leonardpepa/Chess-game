@@ -18,7 +18,7 @@ public abstract class Piece {
 	protected List<Move> moves = new ArrayList<>();
 
 	
-	boolean makeMove(int toX, int toY) {
+	boolean makeMove(int toX, int toY, Board board) {
 		Move move = new Move(xCord, yCord, toX, toY);
 		if(!alive()) {
 			return false;
