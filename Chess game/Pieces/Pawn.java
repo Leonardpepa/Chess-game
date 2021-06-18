@@ -28,6 +28,17 @@ public class Pawn extends Piece {
 		return false;
 		
 	}
+	
+	public boolean madeToTheEnd() {
+		if(isWhite && yCord == 0) {
+			return true;
+		}
+		
+		if(!isWhite && yCord == 7) {
+			return true;
+		}
+		return false;
+	}
 
 	public boolean canMove(int x, int y) {
 
@@ -41,11 +52,11 @@ public class Pawn extends Piece {
 
 		if (isWhite) {
 			if (firstMove) {
-				if (x == xCord && (y == yCord - 1 || y == yCord - 2) && board.getXY(xCord, yCord - 1) == 0) {
+				if (x == xCord && (y == yCord - 1 || y == yCord - 2) && board.getPiece(x, y) == null && board.getPiece(x, y + 1) == null) {
 					return true;
 				}
 			}
-			if (x == xCord && y == yCord - 1 && board.getXY(x, y) == 0) {
+			if (x == xCord && y == yCord - 1 && board.getPiece(x, y) == null) {
 				return true;
 			}
 			if (y == yCord - 1 && x == xCord + 1) {
@@ -59,11 +70,11 @@ public class Pawn extends Piece {
 		}
 		if (!isWhite) {
 			if (firstMove) {
-				if (x == xCord && (y == yCord + 1 || y == yCord + 2) && board.getXY(xCord, yCord + 1) == 0) {
+				if (x == xCord && (y == yCord + 1 || y == yCord + 2) && board.getPiece(x, y) == null && board.getPiece(x, y - 1) == null) {
 					return true;
 				}
 			}
-			if (x == xCord && y == yCord + 1 && board.getXY(x, y) == 0) {
+			if (x == xCord && y == yCord + 1 && board.getPiece(x, y) == null) {
 				return true;
 			}
 
@@ -90,13 +101,6 @@ public class Pawn extends Piece {
 		}
 	}
 
-	@Override
-	public boolean alive() {
-		if (board.getXY(xCord, yCord) != valueInTheBoard || board.getXY(xCord, yCord) == 0) {
-			isAlive = false;
-		}
-		return isAlive;
-	}
 
 	public boolean isFirstMove() {
 		return firstMove;

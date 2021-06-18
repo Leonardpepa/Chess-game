@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.SwingUtilities;
 
@@ -36,6 +37,9 @@ public class Game {
 
 	ArrayList<Move> allPossiblesMoves = new ArrayList<Move>();
 	public static boolean drag = false;
+	
+	List<Move> allPlayersMove = new ArrayList<Move>();
+	List<Move> allEnemysMove = new ArrayList<Move>();
 
 	public Game() {
 		for (int i = 0; i < 8; i++) {
@@ -62,6 +66,26 @@ public class Game {
 		fillAllPieces();
 
 	}
+	
+	public void generateOnePlayerMoves() {
+		allPlayersMove = new ArrayList<Move>();
+		for(Piece p: AllPieces) {
+			if(p.isWhite() == player) {
+				p.fillAllPossibleMoves();
+				allPlayersMove.addAll(p.getMoves());
+			}
+		}
+	}
+	
+	public void generateAllEnemysMoves() {
+		allEnemysMove = new ArrayList<Move>();
+		for(Piece p: AllPieces) {
+			if(p.isWhite() != player) {
+				p.fillAllPossibleMoves();
+				allPlayersMove.addAll(p.getMoves());
+			}
+		}
+	}
 
 	public void changeSide() {
 		player = !player;
@@ -84,13 +108,10 @@ public class Game {
 		}
 	}
 	
-	public void drop(int x, int y) {
-		move(x, y);
-	}
-	
 	public void move(int x, int y) {
 		if(active != null) {
 			if(active.makeMove(x, y)) {
+				tryToPromote(active);
 				changeSide();
 			}
 			drag = false;
@@ -107,6 +128,16 @@ public class Game {
 					g.setColor(new Color(182, 142, 96));
 				}
 				g.fillRect(i * Piece.size, j * Piece.size, Piece.size, Piece.size);
+			}
+		}
+	}
+	
+	public void tryToPromote(Piece p) {
+		if(p instanceof Pawn) {
+			if(((Pawn)p).madeToTheEnd()) {
+				AllPieces.remove(p);
+				p = new Queen(p.getXcord(), p.getYcord(), p.isWhite(), board, p.isWhite() ? 8: -8);
+				AllPieces.add(p);
 			}
 		}
 	}

@@ -37,16 +37,13 @@ public class Panel extends JPanel {
 	class Listener extends MouseAdapter{
 		@Override
 		public void mouseClicked(MouseEvent e) {
-//			game.selectPiece(e.getX()/Piece.size, e.getY()/Piece.size);
-//			game.drag = false;
-//			game.move(e.getX()/Piece.size, e.getY()/Piece.size);
 		}
 		
 		@Override
 		public void mouseMoved(MouseEvent e) {
 			ti = e.getX()/Piece.size;
 			tj = e.getY()/Piece.size;
-			if(Game.board.getPiece(e.getX()/Piece.size, e.getY()/Piece.size) != null) {
+			if(Game.board.getPiece(ti, tj) != null) {
 				setCursor(new Cursor(Cursor.HAND_CURSOR));
 			}
 			else {
@@ -63,6 +60,7 @@ public class Panel extends JPanel {
 				game.selectPiece(e.getX()/Piece.size, e.getY()/Piece.size);
 				xx = e.getX();
 				yy = e.getY();
+				revalidate();
 				repaint();				
 			}
 		}
@@ -71,9 +69,9 @@ public class Panel extends JPanel {
 		public void mouseReleased(MouseEvent e) {
 			int x = e.getX() / Piece.size;
 			int y = e.getY() / Piece.size;
-			
-			game.drop(x, y);
-			setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			game.move(x, y);
+			revalidate();
+			repaint();
 		}
 		
 		

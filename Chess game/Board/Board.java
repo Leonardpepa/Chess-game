@@ -10,7 +10,10 @@ public class Board {
 		pieces = new Piece[ROWS][COLUMNS];
 	}
 	
-
+	public void undomove(int fromx, int fromy, int tox, int toy) {
+		
+	}
+	
 	public void setPieceIntoBoard(int x,int y,Piece piece) {
 		grid[x][y] = piece.getValueInTheboard();
 		pieces[x][y] = piece; 

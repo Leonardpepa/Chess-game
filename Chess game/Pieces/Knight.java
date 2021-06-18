@@ -43,17 +43,5 @@ public class Knight extends Piece{
 		return false;
 	}
 	
-	
-	
-
-	@Override
-	public boolean alive() {
-		if(board.getXY(xCord, yCord) != valueInTheBoard || board.getXY(xCord, yCord) == 0 ) {
-			isAlive = false;
-		}
-		return isAlive;
-	}
-	
-	
 
 }

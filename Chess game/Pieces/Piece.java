@@ -35,7 +35,15 @@ public abstract class Piece {
 		
 	}
 	public abstract boolean canMove(int x ,int y);
-	public abstract boolean alive();
+
+	@SuppressWarnings("unlikely-arg-type")
+	public boolean alive() {
+		if (board.getXY(xCord, yCord) != valueInTheBoard || board.getXY(xCord, yCord) == 0 || board.getPiece(xCord, yCord) == null) {
+			isAlive = false;
+			Game.AllPieces.remove(getClass());
+		}
+		return isAlive;
+	}
 	
 	public void intializeSide(int value){
 		if(isWhite) {
@@ -138,6 +146,12 @@ public abstract class Piece {
 	}
 	public int getValueInTheboard() {
 		return valueInTheBoard;
+	}
+	public List<Move> getMoves() {
+		return moves;
+	}
+	public void setMoves(List<Move> moves) {
+		this.moves = moves;
 	}
 	
 }
