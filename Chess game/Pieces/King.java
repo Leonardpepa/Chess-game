@@ -1,5 +1,3 @@
-import java.awt.Color;
-import java.awt.Graphics;
 
 public class King extends Piece {
 	private boolean hasMoved;

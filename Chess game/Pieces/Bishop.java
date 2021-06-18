@@ -1,8 +1,6 @@
-import java.util.ArrayList;
+
 
 public class Bishop extends Piece {
-	
-	private ArrayList<Move> moves = new ArrayList<>();
 	
 	public Bishop(int x, int y, boolean iswhite, Board board, int value) {
 		super(x, y, iswhite, board, value);
