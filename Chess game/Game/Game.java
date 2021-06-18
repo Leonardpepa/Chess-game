@@ -29,7 +29,7 @@ public class Game {
 	static Piece kingW;
 	static Piece kingB;
 
-	String player = "white";
+	boolean player = true;
 	Piece active = null;
 	boolean isSelected = false;
 	static ArrayList<Piece> AllPieces = new ArrayList<Piece>();
@@ -63,59 +63,38 @@ public class Game {
 
 	}
 
-	public void Play(MouseEvent e) {
-		int x = e.getX() / Piece.size;
-		int y = e.getY() / Piece.size;
-
-		if (SwingUtilities.isLeftMouseButton(e) && !drag) {
-
-			if (!isSelected) {
-				active = board.getPiece(x, y);
-				if (active != null) {
-					if (active.isWhite() && player.equals("black") || !active.isWhite() && player.equals("white")) {
-						isSelected = false;
-						active = null;
-					} else {
-						isSelected = true;
-						active.fillAllPossibleMoves();
-
-					}
-				}
-			}
-
-			if (isSelected && (x != active.getXcord() || y != active.getYcord())) {
-				if (active.makeMove(x, y)) {
-					if (active instanceof Pawn) {
-						if (active.isWhite() && active.yCord == 0) {
-							AllPieces.remove(active);
-							active = new Queen(active.getXcord(), active.getYcord(), active.isWhite(), board, 8);
-							AllPieces.add(active);
-						}
-					}
-					player = player.equals("white") ? "black" : "white";
-					active = null;
-					isSelected = false;
-				} else {
-					active = null;
-					isSelected = false;
-				}
-
-			}
-
-		}
+	public void changeSide() {
+		player = !player;
 	}
-
 	
 	public void selectPiece(int x, int y) {
 		if(active == null) {
 			active = board.getPiece(x, y);
+			if(active!=null && active.isWhite() == player) {
+				active.fillAllPossibleMoves();				
+			}else {
+				active = null;
+			}
 		}
 	}
 	
-	public void dragAndDrop(Piece piece, int x, int y, Graphics g) {
+	public void drag(Piece piece, int x, int y, Graphics g) {
 		if(piece!=null && drag == true) {
-			piece.fillAllPossibleMoves();
-			piece.draw2(g, true, x, y);			
+			piece.draw2(g, player, x, y);			
+		}
+	}
+	
+	public void drop(int x, int y) {
+		move(x, y);
+	}
+	
+	public void move(int x, int y) {
+		if(active != null) {
+			if(active.makeMove(x, y)) {
+				changeSide();
+			}
+			drag = false;
+			active  = null;
 		}
 	}
 	

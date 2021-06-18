@@ -6,13 +6,14 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 public class Panel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	Game game;
 	int ti,tj;
-	int xx, yy;
+	public static int xx, yy;
 	
 	Panel(){
 		this.setFocusable(true);
@@ -29,17 +30,16 @@ public class Panel extends JPanel {
 		game.drawPossibleMoves(g);
 		g.setColor(Color.BLACK);
 		g.drawRect(ti*Piece.size, tj*Piece.size, Piece.size, Piece.size);
-		game.dragAndDrop(game.active,xx, yy ,g);
+		game.drag(game.active,xx, yy ,g);
 	}
 	
 
 	class Listener extends MouseAdapter{
 		@Override
 		public void mouseClicked(MouseEvent e) {
-//			game.Play(e);
-			revalidate();
-			repaint();
-			
+//			game.selectPiece(e.getX()/Piece.size, e.getY()/Piece.size);
+//			game.drag = false;
+//			game.move(e.getX()/Piece.size, e.getY()/Piece.size);
 		}
 		
 		@Override
@@ -58,11 +58,13 @@ public class Panel extends JPanel {
 		
 		@Override
 		public void mouseDragged(MouseEvent e) {
-			Game.drag = true;
-			game.selectPiece(e.getX()/Piece.size, e.getY()/Piece.size);
-			xx = e.getX();
-			yy = e.getY();
-			repaint();
+			if(SwingUtilities.isLeftMouseButton(e)) {
+				Game.drag = true;
+				game.selectPiece(e.getX()/Piece.size, e.getY()/Piece.size);
+				xx = e.getX();
+				yy = e.getY();
+				repaint();				
+			}
 		}
 		
 		@Override
@@ -70,11 +72,7 @@ public class Panel extends JPanel {
 			int x = e.getX() / Piece.size;
 			int y = e.getY() / Piece.size;
 			
-			if(game.active!=null && game.active.makeMove(x, y)) {
-				System.out.println("moved");
-			}
-			Game.drag = false;
-			game.active  = null;
+			game.drop(x, y);
 			setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		}
 		

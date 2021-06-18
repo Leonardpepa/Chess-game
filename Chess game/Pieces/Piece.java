@@ -81,15 +81,12 @@ public abstract class Piece {
 		}
 	}
 	
-	public void draw2(Graphics g, boolean drag, int x, int y) {
-		if(this.alive()) {
+	public void draw2(Graphics g, boolean player, int x, int y) {
+		if(this.alive() && player == isWhite()) {
 			g.setColor(pieceColor);
-			if(drag) {
-				g.setFont(new Font(Font.DIALOG, Font.BOLD, 85));
-				g.drawString(this.pieceImage, x - Piece.size/2, y + Piece.size/2);
-			}else {
-				g.drawString(this.pieceImage, this.xCord*size, (this.yCord+1)*size-10);				
-			}
+			g.setFont(new Font(Font.DIALOG, Font.BOLD, 85));
+			g.drawString(this.pieceImage, x - Piece.size/2, y + Piece.size/2);
+			
 		}
 	}
 	
