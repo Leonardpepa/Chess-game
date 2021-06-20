@@ -83,18 +83,18 @@ public class King extends Piece {
 	private void getRook(int x) {
 		if(isWhite()) {
 			if(x >= xCord) {
-				rook = (Rook) Game.rookW1;
+				rook = (Rook) board.getPiece(7, 7);
 			}
 			else{
-				rook = (Rook) Game.rookW2;
+				rook = (Rook) board.getPiece(0, 7);
 			}
 		}
 		else {
 			if(x >= xCord) {
-				rook = (Rook) Game.rookB1;
+				rook = (Rook) board.getPiece(7, 0);
 			}
 			else{
-				rook = (Rook) Game.rookB2;	
+				rook = (Rook) board.getPiece(0, 0);	
 			}
 		}
 	}

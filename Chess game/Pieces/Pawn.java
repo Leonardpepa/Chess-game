@@ -1,4 +1,3 @@
-import java.util.List;
 
 public class Pawn extends Piece {
 	private boolean firstMove;
@@ -27,9 +26,10 @@ public class Pawn extends Piece {
 				}
 				else {
 					canEnPassant = false;
+					removePawnCapturedFromEnPassant(toX, toY);
 					removeEnpassantAtr();
 				}
-				removePawnCapturedFromEnPassant(toX, toY);
+				
 				board.updatePieces(xCord, yCord, toX, toY,this);
 				xCord = toX;
 				yCord = toY;				
@@ -61,7 +61,7 @@ public class Pawn extends Piece {
 					return true;
 				}
 				else if(!this.isWhite() && y == pawnRight.getYcord() + 1 && x == pawnRight.getXcord() && pawnRight.isMoved2Squares()) {
-						return true;
+					return true;
 				}
 				
 			}
@@ -77,7 +77,7 @@ public class Pawn extends Piece {
 				}
 				
 			}
-		}			
+		}					
 	
 
 		
@@ -153,28 +153,27 @@ public class Pawn extends Piece {
 	}
 
 	public void removeEnpassantAtr() {
-		for(Piece pawn: Game.pawnB) {
-			((Pawn) pawn).setMoved2Squares(false);
-		}
-		for(Piece pawn: Game.pawnW) {
-			((Pawn) pawn).setMoved2Squares(false);
+		for(Piece piece: Game.AllPieces) {
+			if(piece instanceof Pawn) {
+				((Pawn) piece).setMoved2Squares(false);				
+			}
 		}
 	}
 	
 	public void removePawnCapturedFromEnPassant(int x, int y) {
 		if(isWhite()) {
-			if(pawnLeft != null && x == pawnLeft.getXcord() && y + 1 == pawnLeft.getYcord()) {
+			if(pawnLeft != null && x == pawnLeft.getXcord() && y + 1 == pawnLeft.getYcord() && pawnLeft.isMoved2Squares()) {
 				board.setXY(pawnLeft.getXcord(), pawnLeft.getYcord(), 0);
 			}
-			if(pawnRight != null && x == pawnRight.getXcord() && y + 1 == pawnRight.getYcord()) {
+			if(pawnRight != null && x == pawnRight.getXcord() && y + 1 == pawnRight.getYcord() && pawnRight.isMoved2Squares()) {
 				board.setXY(pawnRight.getXcord(), pawnRight.getYcord(), 0);	
 			}
 		}
 		else {
-			if(pawnLeft != null && x == pawnLeft.getXcord() && y- 1 == pawnLeft.getYcord()) {
+			if(pawnLeft != null && x == pawnLeft.getXcord() && y- 1 == pawnLeft.getYcord() && pawnLeft.isMoved2Squares()) {
 				board.setXY(pawnLeft.getXcord(), pawnLeft.getYcord(), 0);
 			}
-			if(pawnRight != null && x == pawnRight.getXcord() && y - 1 == pawnRight.getYcord()) {
+			if(pawnRight != null && x == pawnRight.getXcord() && y - 1 == pawnRight.getYcord() && pawnRight.isMoved2Squares()) {
 				board.setXY(pawnRight.getXcord(), pawnRight.getYcord(), 0);	
 			}
 		}
