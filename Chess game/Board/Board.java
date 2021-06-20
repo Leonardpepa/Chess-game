@@ -10,10 +10,7 @@ public class Board {
 		pieces = new Piece[ROWS][COLUMNS];
 	}
 	
-	public void undomove(int fromx, int fromy, int tox, int toy) {
-		
-	}
-	
+
 	public void setPieceIntoBoard(int x,int y,Piece piece) {
 		grid[x][y] = piece.getValueInTheboard();
 		pieces[x][y] = piece; 
@@ -50,6 +47,15 @@ public class Board {
 	
 	public void setXY(int x,int y,int v) {
 		 grid[x][y] = v ;
+	}
+	
+	public Board getNewBoard() {
+		try {
+			return (Board) this.clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 }

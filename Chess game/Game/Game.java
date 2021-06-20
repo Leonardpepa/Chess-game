@@ -6,6 +6,8 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JPanel;
+
 
 public class Game {
 	static Board board = new Board();
@@ -65,6 +67,13 @@ public class Game {
 
 	}
 	
+	public void draw(Graphics g, int x, int y) {
+		drawBoard(g);
+		drawPiece(g);
+		drawPossibleMoves(g);
+		drag(active,x, y ,g);
+	}
+	
 	public void generateOnePlayerMoves() {
 		allPlayersMove = new ArrayList<Move>();
 		for(Piece p: AllPieces) {
@@ -112,7 +121,6 @@ public class Game {
 				tryToPromote(active);
 				changeSide();
 			}
-			drag = false;
 			active  = null;
 		}
 	}
@@ -130,6 +138,7 @@ public class Game {
 		}
 	}
 	
+	
 	public void tryToPromote(Piece p) {
 		if(p instanceof Pawn) {
 			if(((Pawn)p).madeToTheEnd()) {
@@ -142,17 +151,15 @@ public class Game {
 
 	public void drawPossibleMoves(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
-		g2.setColor(Color.BLACK);
-		g2.setStroke(new BasicStroke(2));
-
+		g2.setStroke(new BasicStroke(3));
 		if (active != null) {
-			active.showMoves(g);
+			active.showMoves(g2);
 		}
 
 	}
 
 	public void drawPiece(Graphics g) {
-		g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 75));
+		g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, Piece.size));
 		for (Piece p : AllPieces) {
 			p.draw(g, false);
 		}

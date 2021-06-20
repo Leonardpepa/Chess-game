@@ -25,12 +25,7 @@ public class Panel extends JPanel {
 	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		game.drawBoard(g);
-		game.drawPiece(g);
-		game.drawPossibleMoves(g);
-		g.setColor(Color.BLACK);
-		g.drawRect(ti*Piece.size, tj*Piece.size, Piece.size, Piece.size);
-		game.drag(game.active,xx, yy ,g);
+		game.draw(g, xx, yy);
 	}
 	
 
