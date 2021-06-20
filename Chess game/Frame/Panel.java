@@ -34,9 +34,17 @@ public class Panel extends JPanel {
 	}
 	
 
+	
+
 	class Listener extends MouseAdapter{
 		@Override
 		public void mouseClicked(MouseEvent e) {
+			int x = e.getX()/Piece.size;
+			int y = e.getY()/Piece.size;
+			game.drag = false;
+			game.selectPiece(x, y);
+			revalidate();
+			repaint();
 		}
 		
 		@Override

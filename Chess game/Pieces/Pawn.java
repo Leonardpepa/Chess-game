@@ -89,18 +89,6 @@ public class Pawn extends Piece {
 		return false;
 	}
 
-	@Override
-	public void showMoves(Graphics g) {
-		g.setColor(Color.CYAN);
-		for (int i = 0; i < 8; i++) {
-			for (int j = 0; j < 8; j++) {
-				if (canMove(i, j)) {
-					g.drawRect(i * size, j * size, size, size);
-				}
-			}
-		}
-	}
-
 
 	public boolean isFirstMove() {
 		return firstMove;
