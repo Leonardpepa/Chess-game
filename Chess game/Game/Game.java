@@ -26,7 +26,7 @@ public class Game {
 	
 	public Game() {
 		//starting position rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
-		fen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
+		loadFenPosition("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
 	}
 	
 	public void draw(Graphics g, int x, int y) {
@@ -153,7 +153,7 @@ public class Game {
 
 	}
 	
-	public void fen(String possition) {
+	public void loadFenPosition(String possition) {
 		//rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
 		int row = 0, col = 0;
 		for(char c: possition.toCharArray()) {
@@ -171,7 +171,7 @@ public class Game {
 				col++;
 			}
 			if(Character.isDigit(c)) {
-				col = Integer.parseInt(String.valueOf(c));
+				col += Integer.parseInt(String.valueOf(c));
 			}
 		}
 		
