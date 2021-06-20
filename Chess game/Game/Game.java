@@ -177,6 +177,13 @@ public class Game {
 			}
 		}
 		
+		if(parts[1].equals("w")) {
+			player = true;
+		}
+		else {
+			player = false;
+		}
+		
 	}
 	
 	public void addToBoard(int x, int y, char c, boolean isWhite) {
