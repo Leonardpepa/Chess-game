@@ -1,7 +1,9 @@
+import java.util.List;
 
 public class Pawn extends Piece {
 	private boolean firstMove;
-	private static boolean movedTwoSqFisrtTime = false;
+	private static boolean canEnPassant = false;
+	private boolean moved2Squares = false;
 	public Pawn(int x, int y, boolean iswhite, Board board, int value) {
 		super(x, y, iswhite, board, value);
 		firstMove = true;
@@ -17,10 +19,12 @@ public class Pawn extends Piece {
 		for(Move m: moves) {
 			if(m.compareTo(move) == 0) {
 				if(firstMove && Math.abs(yCord - m.getToY()) == 2) {
-					movedTwoSqFisrtTime = true;
+					canEnPassant = true;
+					moved2Squares = true;
 				}
 				else {
-					movedTwoSqFisrtTime = false;	
+					canEnPassant = false;
+					removeEnpassantAtr();
 				}
 				board.updatePieces(xCord, yCord, toX, toY,this);
 				xCord = toX;
@@ -45,47 +49,66 @@ public class Pawn extends Piece {
 	}
 
 	public boolean canMove(int x, int y) {
+		
+		
 		Pawn pawnRight = null;
 		Pawn pawnLeft = null;
-		
-		if(isWhite()) {
-			if(xCord != 7 && board.getPiece(xCord + 1, yCord) != null && board.getPiece(xCord + 1, yCord) instanceof Pawn) {
-				pawnRight = board.getPiece(xCord + 1, yCord).isWhite() != this.isWhite()? (Pawn) board.getPiece(xCord + 1, yCord) : null;			
-				if(pawnRight != null && y == pawnRight.getYcord() - 1 && x == pawnRight.getXcord() &&pawnRight.isMovedTwoSqFisrtTime()) {
+	
+		if(xCord != 7 && board.getPiece(xCord + 1, yCord) != null && board.getPiece(xCord + 1, yCord) instanceof Pawn) {
+			pawnRight = board.getPiece(xCord + 1, yCord).isWhite() != this.isWhite()? (Pawn) board.getPiece(xCord + 1, yCord) : null;			
+			if(pawnRight != null && Pawn.canEnPassant) {
+				if(this.isWhite() && y == pawnRight.getYcord() - 1 && x == pawnRight.getXcord() && pawnRight.isMoved2Squares()) {
 					return true;
 				}
+				else if(!this.isWhite() && y == pawnRight.getYcord() + 1 && x == pawnRight.getXcord() && pawnRight.isMoved2Squares()) {
+						return true;
+				}
+				
 			}
-			if(xCord != 0 &&board.getPiece(xCord - 1, yCord) != null && board.getPiece(xCord - 1, yCord) instanceof Pawn) {
-				pawnLeft = board.getPiece(xCord - 1, yCord).isWhite() != this.isWhite()?  (Pawn) board.getPiece(xCord - 1, yCord): null;	
-				if(pawnLeft != null && y == pawnLeft.getYcord() - 1 && x == pawnLeft.getXcord() && pawnLeft.isMovedTwoSqFisrtTime()) {
+		}
+		if(xCord != 0 &&board.getPiece(xCord - 1, yCord) != null && board.getPiece(xCord - 1, yCord) instanceof Pawn) {
+			pawnLeft = board.getPiece(xCord - 1, yCord).isWhite() != this.isWhite()?  (Pawn) board.getPiece(xCord - 1, yCord): null;	
+			if(pawnLeft != null && Pawn.canEnPassant) {
+				if(this.isWhite() && y == pawnLeft.getYcord() - 1 && x == pawnLeft.getXcord() && pawnLeft.isMoved2Squares()) {
 					return true;
 				}
-			}			
-		}
+				else if(!this.isWhite() && y == pawnLeft.getYcord() + 1 && x == pawnLeft.getXcord() && pawnLeft.isMoved2Squares()) {
+					return true;
+				}
+				
+			}
+		}			
+	
 
 		
 		
+		//something blocking the way
 		if ((board.getPiece(x, y) != null && board.getPiece(x, y).isWhite() == isWhite())) {
 			return false;
 		}
 
+		//cant move diagonial if it isnt  for capture
 		if (xCord != x && board.getPiece(x, y) == null) {
 			return false;
 		}
 
 		if (isWhite) {
+			//move two or 1 square at beggining
 			if (firstMove) {
 				if (x == xCord && (y == yCord - 1 || y == yCord - 2) && board.getPiece(x, y) == null && board.getPiece(x, y + 1) == null) {
 					return true;
 				}
 			}
+			//move forward
 			if (x == xCord && y == yCord - 1 && board.getPiece(x, y) == null) {
 				return true;
 			}
+			
+			//capture
 			if (y == yCord - 1 && x == xCord + 1) {
 				return true;
 			}
-
+			//capture
 			if (y == yCord - 1 && x == xCord - 1) {
 				return true;
 			}
@@ -121,14 +144,21 @@ public class Pawn extends Piece {
 		this.firstMove = firstMove;
 	}
 
-	public boolean isMovedTwoSqFisrtTime() {
-		return movedTwoSqFisrtTime;
+	public boolean isMoved2Squares() {
+		return moved2Squares;
 	}
 
-	public void setMovedTwoSqFisrtTime(boolean movedTwoSqFisrtTime) {
-		this.movedTwoSqFisrtTime = movedTwoSqFisrtTime;
+	public void setMoved2Squares(boolean moved2Squares) {
+		this.moved2Squares = moved2Squares;
 	}
 
-	
+	public void removeEnpassantAtr() {
+		for(Piece pawn: Game.pawnB) {
+			((Pawn) pawn).setMoved2Squares(false);
+		}
+		for(Piece pawn: Game.pawnW) {
+			((Pawn) pawn).setMoved2Squares(false);
+		}
+	}
 	
 }
