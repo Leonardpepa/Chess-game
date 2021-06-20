@@ -103,7 +103,6 @@ public class Game {
 			active = board.getPiece(x, y);
 			if(active!=null && active.isWhite() == player) {
 				active.fillAllPossibleMoves();
-				generateAllEnemysMoves();
 			}else {
 				active = null;
 			}

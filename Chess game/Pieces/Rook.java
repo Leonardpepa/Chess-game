@@ -64,13 +64,16 @@ public class Rook extends Piece {
 
 	}
 	
-	public void castleDone(Piece king, boolean kingSide) {
-		if(kingSide && !hasMoved) {
-			board.updatePieces(xCord, yCord, king.getXcord() - 1, king.getYcord(),this);
-			xCord = king.getXcord() - 1;
-			yCord = king.getYcord();
-			hasMoved = true;
+	public void castleDone(int x) {
+		if(x == 6) {
+			board.updatePieces(xCord, yCord, x-1, yCord,this);
+			xCord = x-1;
 		}
+		else {
+			board.updatePieces(xCord, yCord, x+1, yCord,this);
+			xCord = x+1;
+		}
+		hasMoved = true;
 	}
 	
 	public boolean HasMoved() {

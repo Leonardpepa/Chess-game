@@ -72,7 +72,7 @@ public abstract class Piece {
 		for(Move m: moves) {
 			g.setColor(Color.CYAN);
 			g.drawRect(m.getToX()*size, m.getToY()*size, size, size);
-			g2.setColor(Color.red);
+			g2.setColor(Color.black);
 			g2.drawRect(m.getFromX()*size, m.getFromY()*size, size, size);
 		}
 	}
