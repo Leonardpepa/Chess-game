@@ -26,7 +26,7 @@ public class Game {
 	
 	public Game() {
 		//starting position rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
-		loadFenPosition("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
+		loadFenPosition("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 	}
 	
 	public void draw(Graphics g, int x, int y) {
@@ -153,10 +153,12 @@ public class Game {
 
 	}
 	
-	public void loadFenPosition(String possition) {
+	public void loadFenPosition(String fenString) {
 		//rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
+		String[] parts = fenString.split(" ");
+		String position = parts[0];
 		int row = 0, col = 0;
-		for(char c: possition.toCharArray()) {
+		for(char c: position.toCharArray()) {
 			if(c == '/') {
 				row++;
 				col = 0;
