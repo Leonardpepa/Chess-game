@@ -25,6 +25,7 @@ public class Game {
 	static List<Move> allEnemysMove = new ArrayList<Move>();
 	
 	public Game() {
+		//starting position rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
 		fen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
 	}
 	
@@ -157,9 +158,10 @@ public class Game {
 		int row = 0, col = 0;
 		for(char c: possition.toCharArray()) {
 			if(c == '/') {
-				row += 1;
+				row++;
 				col = 0;
-			}else if(Character.isLetter(c)){
+			}
+			if(Character.isLetter(c)){
 				if(Character.isLowerCase(c)) {
 					addToBoard(col, row, c, false);
 				}
@@ -168,10 +170,11 @@ public class Game {
 				}
 				col++;
 			}
-			else if(Character.isDigit(c)) {
-				col = Integer.parseInt(String.valueOf(c)) - 1;
+			if(Character.isDigit(c)) {
+				col = Integer.parseInt(String.valueOf(c));
 			}
 		}
+		
 	}
 	
 	public void addToBoard(int x, int y, char c, boolean isWhite) {
