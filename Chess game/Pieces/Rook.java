@@ -8,6 +8,15 @@ public class Rook extends Piece {
 		hasMoved = false;
 		this.pieceImage = PieceImages.ROOK;
 	}
+	
+	@Override
+	boolean makeMove(int toX, int toY, Board board) {
+		if(super.makeMove(toX, toY, board)) {
+			hasMoved = true;
+			return true;
+		}
+		return false;
+	}
 
 	@Override
 	public boolean canMove(int x, int y) {
@@ -54,7 +63,16 @@ public class Rook extends Piece {
 		return false;
 
 	}
-
+	
+	public void castleDone(Piece king, boolean kingSide) {
+		if(kingSide && !hasMoved) {
+			board.updatePieces(xCord, yCord, king.getXcord() - 1, king.getYcord(),this);
+			xCord = king.getXcord() - 1;
+			yCord = king.getYcord();
+			hasMoved = true;
+		}
+	}
+	
 	public boolean HasMoved() {
 		return hasMoved;
 	}

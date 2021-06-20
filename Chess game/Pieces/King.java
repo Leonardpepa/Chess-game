@@ -1,13 +1,28 @@
 
 public class King extends Piece {
 	private boolean hasMoved;
-	private boolean hasCastled;
 	
 	public King(int x, int y, boolean iswhite, Board board, int value) {
 		super(x, y, iswhite, board, value);
 		hasMoved = false;
-		hasCastled = false;
 		this.pieceImage = PieceImages.KING;
+	}
+	
+	public boolean makeMove(int x, int y, Board board) {
+		Move move = new Move(xCord, yCord, x, y);
+		if(!alive()) {
+			return false;
+		}
+		for(Move m: moves) {
+			if(m.compareTo(move) == 0) {
+				board.updatePieces(xCord, yCord, x, y,this);
+				xCord = x;
+				yCord = y;
+				hasMoved = true;
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override
@@ -27,4 +42,7 @@ public class King extends Piece {
 		}
 		return false;
 	}
+	
+
+	
 }

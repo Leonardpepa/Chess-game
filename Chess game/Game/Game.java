@@ -30,7 +30,7 @@ public class Game {
 	static Piece kingW;
 	static Piece kingB;
 
-	boolean player = true;
+	static boolean player = true;
 	Piece active = null;
 	boolean isSelected = false;
 	static ArrayList<Piece> AllPieces = new ArrayList<Piece>();
@@ -38,8 +38,8 @@ public class Game {
 	ArrayList<Move> allPossiblesMoves = new ArrayList<Move>();
 	public static boolean drag = false;
 	
-	List<Move> allPlayersMove = new ArrayList<Move>();
-	List<Move> allEnemysMove = new ArrayList<Move>();
+	static List<Move> allPlayersMove = new ArrayList<Move>();
+	static List<Move> allEnemysMove = new ArrayList<Move>();
 
 	public Game() {
 		for (int i = 0; i < 8; i++) {
@@ -74,7 +74,7 @@ public class Game {
 		drag(active,x, y ,g);
 	}
 	
-	public void generateOnePlayerMoves() {
+	public static void generateOnePlayerMoves() {
 		allPlayersMove = new ArrayList<Move>();
 		for(Piece p: AllPieces) {
 			if(p.isWhite() == player) {
@@ -84,7 +84,7 @@ public class Game {
 		}
 	}
 	
-	public void generateAllEnemysMoves() {
+	public static void generateAllEnemysMoves() {
 		allEnemysMove = new ArrayList<Move>();
 		for(Piece p: AllPieces) {
 			if(p.isWhite() != player) {
@@ -102,7 +102,8 @@ public class Game {
 		if(active == null) {
 			active = board.getPiece(x, y);
 			if(active!=null && active.isWhite() == player) {
-				active.fillAllPossibleMoves();				
+				active.fillAllPossibleMoves();
+				generateAllEnemysMoves();
 			}else {
 				active = null;
 			}
