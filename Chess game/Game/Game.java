@@ -1,42 +1,17 @@
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 
 public class Game {
 	static Board board = new Board();
 	static Piece[] pawnW = new Pawn[8];
 	static Piece[] pawnB = new Pawn[8];
-	static Piece knightW1;
-	static Piece knightW2;
-	static Piece bishopW1;
-	static Piece bishopW2;
-	static Piece rookW2;
-	static Piece rookW1;
-	static Piece queenW;
-	static Piece knightB1;
-	static Piece knightB2;
-	static Piece bishopB1;
-	static Piece bishopB2;
-	static Piece rookB1;
-	static Piece rookB2;
-	static Piece queenB;
-	static Piece kingW;
-	static Piece kingB;
 
 	static boolean player = true;
 	Piece active = null;
@@ -50,28 +25,7 @@ public class Game {
 	static List<Move> allEnemysMove = new ArrayList<Move>();
 	
 	public Game() {
-		for (int i = 0; i < 8; i++) {
-			pawnW[i] = new Pawn(i, 6, true, board, 1);
-			pawnB[i] = new Pawn(i, 1, false, board, -1);
-		}
-		knightB1 = new Knight(6, 0, false, board, -3);
-		knightB2 = new Knight(1, 0, false, board, -3);
-		bishopB1 = new Bishop(5, 0, false, board, -3);
-		bishopB2 = new Bishop(2, 0, false, board, -3);
-		rookB1 = new Rook(7, 0, false, board, -5);
-		rookB2 = new Rook(0, 0, false, board, -5);
-		queenB = new Queen(3, 0, false, board, -8);
-		kingB = new King(4, 0, false, board, -100);
-
-		rookW1 = new Rook(7, 7, true, board, 5);
-		rookW2 = new Rook(0, 7, true, board, 5);
-		knightW1 = new Knight(1, 7, true, board, 3);
-		knightW2 = new Knight(6, 7, true, board, 3);
-		bishopW1 = new Bishop(2, 7, true, board, 3);
-		bishopW2 = new Bishop(5, 7, true, board, 3);
-		queenW = new Queen(3, 7, true, board, 8);
-		kingW = new King(4, 7, true, board, 100);
-		fillAllPieces();
+		fen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
 	}
 	
 	public void draw(Graphics g, int x, int y) {
@@ -146,12 +100,12 @@ public class Game {
 	public void tryToPromote(Piece p) {
 		if(p instanceof Pawn) {
 			if(((Pawn)p).madeToTheEnd()) {
-				popUpPieces(p.pieceColor, p);
+				PromotionFrame.popUpPieces(p.pieceColor, p);
 			}
 		}
 	}
 	
-	public void choosePiece(Piece p, int choice) {
+	public static void choosePiece(Piece p, int choice) {
 		switch (choice) {
 		case 0:
 			AllPieces.remove(p);
@@ -198,95 +152,49 @@ public class Game {
 
 	}
 	
-	public void  popUpPieces(Color color, Piece p) {
-		JFrame frame = new JFrame("Choose piece");
-		JPanel panel = new JPanel();
-		panel.setLayout(new GridLayout(2,2, 1, 1));
-		frame.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		
-		
-		JButton rook = new JButton(PieceImages.ROOK);
-		rook.setFont(new Font(Font.DIALOG, Font.BOLD, 75));
-		rook.setForeground(color);
-		rook.setBackground(new Color(182, 142, 96));
-		rook.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				choosePiece(p, 1);
-				frame.dispose();
+	public void fen(String possition) {
+		//rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
+		int row = 0, col = 0;
+		for(char c: possition.toCharArray()) {
+			if(c == '/') {
+				row += 1;
+				col = 0;
+			}else if(Character.isLetter(c)){
+				if(Character.isLowerCase(c)) {
+					addToBoard(col, row, c, false);
+				}
+				else {
+					addToBoard(col, row, c, true);
+				}
+				col++;
 			}
-		});
-		
-		
-		JButton queen = new JButton(PieceImages.QUEEN);
-		queen.setFont(new Font(Font.DIALOG, Font.BOLD, 75));
-		queen.setForeground(color);
-		queen.setBackground(new Color(182, 142, 96));
-		queen.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				choosePiece(p, 0);
-				frame.dispose();
+			else if(Character.isDigit(c)) {
+				col = Integer.parseInt(String.valueOf(c)) - 1;
 			}
-		});
-		
-		JButton knight = new JButton(PieceImages.KNIGHT);
-		knight.setFont(new Font(Font.DIALOG, Font.BOLD, 75));
-		knight.setForeground(color);
-		knight.setBackground(new Color(113, 144, 58));
-		knight.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				choosePiece(p, 2);
-				frame.dispose();
-			}
-		});
-		
-		JButton bishop = new JButton(PieceImages.BISHOP);
-		bishop.setFont(new Font(Font.DIALOG, Font.BOLD, 75));
-		bishop.setForeground(color);
-		bishop.setBackground(new Color(113, 144, 58));
-		bishop.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				choosePiece(p, 3);
-				frame.dispose();
-			}
-		});
-		
-		panel.add(bishop);
-		panel.add(queen);
-		panel.add(rook);
-		panel.add(knight);
-		
-		frame.setSize(300, 300);
-		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		frame.setContentPane(panel);
-		frame.setVisible(true);
-		frame.setLocationRelativeTo(null);
-	}
-
-	public void fillAllPieces() {
-		for (int i = 0; i < 8; i++) {
-			AllPieces.add(pawnB[i]);
-			AllPieces.add(pawnW[i]);
 		}
-		AllPieces.add(queenW);
-		AllPieces.add(queenB);
-		AllPieces.add(kingW);
-		AllPieces.add(kingB);
-		AllPieces.add(rookW1);
-		AllPieces.add(rookW2);
-		AllPieces.add(rookB1);
-		AllPieces.add(rookB2);
-		AllPieces.add(bishopW2);
-		AllPieces.add(bishopW1);
-		AllPieces.add(bishopB1);
-		AllPieces.add(bishopB2);
-		AllPieces.add(knightB1);
-		AllPieces.add(knightB2);
-		AllPieces.add(knightW1);
-		AllPieces.add(knightW2);
+	}
+	
+	public void addToBoard(int x, int y, char c, boolean isWhite) {
+		switch (String.valueOf(c).toUpperCase()) {
+		case "R":
+			AllPieces.add(new Rook(x, y, isWhite, board, isWhite ? 5 : -5));
+			break;
+		case "N":
+			AllPieces.add(new Knight(x, y, isWhite, board, isWhite ? 3 : -3));
+			break;
+		case "B":
+			AllPieces.add(new Bishop(x, y, isWhite, board, isWhite ? 3 : -3));
+			break;
+		case "Q":
+			AllPieces.add(new Queen(x, y, isWhite, board, isWhite ? 8 : -8));
+			break;
+		case "K":
+			AllPieces.add(new King(x, y, isWhite, board, isWhite ? 100 : -100));
+			break;
+		case "P":
+			AllPieces.add(new Pawn(x, y, isWhite, board, isWhite ? 1 : -1));
+			break;
+		}
 	}
 
 }

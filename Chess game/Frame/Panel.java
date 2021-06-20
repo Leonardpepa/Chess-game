@@ -1,5 +1,5 @@
 
-import java.awt.Color;
+
 import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
@@ -36,7 +36,7 @@ public class Panel extends JPanel {
 		public void mouseClicked(MouseEvent e) {
 			int x = e.getX()/Piece.size;
 			int y = e.getY()/Piece.size;
-			game.drag = false;
+			Game.drag = false;
 			game.active = null;
 			game.selectPiece(x, y);
 			revalidate();
@@ -77,9 +77,7 @@ public class Panel extends JPanel {
 			revalidate();
 			repaint();
 		}
-		
-		
-		
+
 	}
 	
 
