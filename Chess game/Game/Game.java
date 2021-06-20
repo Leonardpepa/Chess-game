@@ -106,13 +106,9 @@ public class Game {
 	}
 	
 	public void selectPiece(int x, int y) {
-		if(active == null) {
+		if(active == null && board.getPiece(x, y) != null && board.getPiece(x, y).isWhite() == player) {
 			active = board.getPiece(x, y);
-			if(active!=null && active.isWhite() == player) {
-				active.fillAllPossibleMoves();
-			}else {
-				active = null;
-			}
+			active.fillAllPossibleMoves();
 		}
 	}
 	
@@ -128,6 +124,7 @@ public class Game {
 				tryToPromote(active);
 				changeSide();
 			}
+			drag = false;
 			active  = null;
 		}
 	}

@@ -37,6 +37,7 @@ public class Panel extends JPanel {
 			int x = e.getX()/Piece.size;
 			int y = e.getY()/Piece.size;
 			game.drag = false;
+			game.active = null;
 			game.selectPiece(x, y);
 			revalidate();
 			repaint();
