@@ -20,7 +20,7 @@ public class King extends Piece {
 				board.updatePieces(xCord, yCord, x, y,this);
 				xCord = x;
 				yCord = y;
-				if(!this.hasMoved && !rook.HasMoved()) {
+				if(rook != null && !this.hasMoved && !rook.HasMoved()) {
 					if(x == rook.getXcord() - 1 || x == rook.getXcord() + 2) {
 						rook.castleDone(xCord);
 					}					
@@ -50,10 +50,9 @@ public class King extends Piece {
 		
 		
 		getRook(x);
-		
-		if(rook.HasMoved() || this.hasMoved) {
+		if(rook != null && (rook.HasMoved() || this.hasMoved)) {
 			return false;
-		}else{
+		}else if(rook != null){
 			for(int k=xCord + 1; k<rook.getXcord() - 1; k++) {
 				if(board.getPiece(k, yCord) != null) {
 					return false;
