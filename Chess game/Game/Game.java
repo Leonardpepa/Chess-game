@@ -1,11 +1,19 @@
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 
@@ -40,7 +48,7 @@ public class Game {
 	
 	static List<Move> allPlayersMove = new ArrayList<Move>();
 	static List<Move> allEnemysMove = new ArrayList<Move>();
-
+	
 	public Game() {
 		for (int i = 0; i < 8; i++) {
 			pawnW[i] = new Pawn(i, 6, true, board, 1);
@@ -64,7 +72,6 @@ public class Game {
 		queenW = new Queen(3, 7, true, board, 8);
 		kingW = new King(4, 7, true, board, 100);
 		fillAllPieces();
-
 	}
 	
 	public void draw(Graphics g, int x, int y) {
@@ -142,10 +149,38 @@ public class Game {
 	public void tryToPromote(Piece p) {
 		if(p instanceof Pawn) {
 			if(((Pawn)p).madeToTheEnd()) {
-				AllPieces.remove(p);
-				p = new Queen(p.getXcord(), p.getYcord(), p.isWhite(), board, p.isWhite() ? 8: -8);
-				AllPieces.add(p);
+				popUpPieces(p.pieceColor, p);
 			}
+		}
+	}
+	
+	public void choosePiece(Piece p, int choice) {
+		switch (choice) {
+		case 0:
+			AllPieces.remove(p);
+			p = new Queen(p.getXcord(), p.getYcord(), p.isWhite(), board, p.isWhite() ? 8: -8);					
+			AllPieces.add(p);
+			break;
+		case 1:
+			AllPieces.remove(p);
+			p = new Rook(p.getXcord(), p.getYcord(), p.isWhite(), board, p.isWhite() ? 5: -5);
+			AllPieces.add(p);
+			break;
+		case 2:
+			AllPieces.remove(p);
+			p = new Knight(p.getXcord(), p.getYcord(), p.isWhite(), board, p.isWhite() ? 3: -3);
+			AllPieces.add(p);
+			break;
+		case 3: 
+			AllPieces.remove(p);
+			p = new Bishop(p.getXcord(), p.getYcord(), p.isWhite(), board, p.isWhite() ? 3: -3);
+			AllPieces.add(p);
+			break;
+		default:
+			AllPieces.remove(p);
+			p = new Queen(p.getXcord(), p.getYcord(), p.isWhite(), board, p.isWhite() ? 8: -8);
+			AllPieces.add(p);
+			break;
 		}
 	}
 
@@ -164,6 +199,74 @@ public class Game {
 			p.draw(g, false);
 		}
 
+	}
+	
+	public void  popUpPieces(Color color, Piece p) {
+		JFrame frame = new JFrame("Choose piece");
+		JPanel panel = new JPanel();
+		panel.setLayout(new GridLayout(2,2, 1, 1));
+		frame.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		
+		
+		JButton rook = new JButton(PieceImages.ROOK);
+		rook.setFont(new Font(Font.DIALOG, Font.BOLD, 75));
+		rook.setForeground(color);
+		rook.setBackground(new Color(182, 142, 96));
+		rook.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				choosePiece(p, 1);
+				frame.dispose();
+			}
+		});
+		
+		
+		JButton queen = new JButton(PieceImages.QUEEN);
+		queen.setFont(new Font(Font.DIALOG, Font.BOLD, 75));
+		queen.setForeground(color);
+		queen.setBackground(new Color(182, 142, 96));
+		queen.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				choosePiece(p, 0);
+				frame.dispose();
+			}
+		});
+		
+		JButton knight = new JButton(PieceImages.KNIGHT);
+		knight.setFont(new Font(Font.DIALOG, Font.BOLD, 75));
+		knight.setForeground(color);
+		knight.setBackground(new Color(113, 144, 58));
+		knight.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				choosePiece(p, 2);
+				frame.dispose();
+			}
+		});
+		
+		JButton bishop = new JButton(PieceImages.BISHOP);
+		bishop.setFont(new Font(Font.DIALOG, Font.BOLD, 75));
+		bishop.setForeground(color);
+		bishop.setBackground(new Color(113, 144, 58));
+		bishop.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				choosePiece(p, 3);
+				frame.dispose();
+			}
+		});
+		
+		panel.add(bishop);
+		panel.add(queen);
+		panel.add(rook);
+		panel.add(knight);
+		
+		frame.setSize(300, 300);
+		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		frame.setContentPane(panel);
+		frame.setVisible(true);
+		frame.setLocationRelativeTo(null);
 	}
 
 	public void fillAllPieces() {
