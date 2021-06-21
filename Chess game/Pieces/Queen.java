@@ -8,7 +8,15 @@ public class Queen extends Piece {
 	}
 	
 
-	
+	public void intializeSide(int value){
+		super.intializeSide(value);
+		if(isWhite()) {
+			image = PieceImages.wq;
+		}
+		else {
+			image = PieceImages.bq;
+		}
+	}
 
 
 	@Override

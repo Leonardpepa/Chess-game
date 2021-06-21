@@ -8,6 +8,15 @@ public class King extends Piece {
 		hasMoved = false;
 		this.pieceImage = PieceImages.KING;
 	}
+	public void intializeSide(int value){
+		super.intializeSide(value);
+		if(isWhite()) {
+			image = PieceImages.wk;
+		}
+		else {
+			image = PieceImages.bk;
+		}
+	}
 	
 	public boolean makeMove(int x, int y, Board board) {
 		Move move = new Move(xCord, yCord, x, y);
@@ -53,7 +62,7 @@ public class King extends Piece {
 		if(rook != null && (rook.HasMoved() || this.hasMoved)) {
 			return false;
 		}else if(rook != null){
-			for(int k=xCord + 1; k<rook.getXcord() - 1; k++) {
+			for(int k=xCord + 1; k<rook.getXcord(); k++) {
 				if(board.getPiece(k, yCord) != null) {
 					return false;
 				}
@@ -62,7 +71,7 @@ public class King extends Piece {
 				return true;
 			}
 			
-			for(int k=xCord - 1; k>rook.getXcord() + 1; k--) {
+			for(int k=xCord - 1; k>rook.getXcord(); k--) {
 				if(board.getPiece(k, yCord) != null) {
 					return false;
 				}
@@ -82,18 +91,26 @@ public class King extends Piece {
 	private void getRook(int x) {
 		if(isWhite()) {
 			if(x >= xCord) {
-				rook = (Rook) board.getPiece(7, 7);
+				if(board.getPiece(7, 7) != null && board.getPiece(7, 7) instanceof Rook){
+					rook = (Rook) board.getPiece(7, 7);
+				}
 			}
 			else{
-				rook = (Rook) board.getPiece(0, 7);
+				if(board.getPiece(0, 7) != null && board.getPiece(0, 7) instanceof Rook) {
+					rook = (Rook) board.getPiece(0, 7);
+				}
 			}
 		}
 		else {
 			if(x >= xCord) {
-				rook = (Rook) board.getPiece(7, 0);
+				if(board.getPiece(7, 0) != null && board.getPiece(7, 0) instanceof Rook) {
+					rook = (Rook) board.getPiece(7, 0);					
+				}
 			}
 			else{
-				rook = (Rook) board.getPiece(0, 0);	
+				if(board.getPiece(0,0) != null && board.getPiece(0,0) instanceof Rook) {
+					rook = (Rook) board.getPiece(0, 0);						
+				}
 			}
 		}
 	}
