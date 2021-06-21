@@ -9,6 +9,16 @@ public class Rook extends Piece {
 		this.pieceImage = PieceImages.ROOK;
 	}
 	
+	public void intializeSide(int value){
+		super.intializeSide(value);
+		if(isWhite()) {
+			image = PieceImages.wr;
+		}
+		else {
+			image = PieceImages.br;
+		}
+	}
+	
 	@Override
 	boolean makeMove(int toX, int toY, Board board) {
 		if(super.makeMove(toX, toY, board)) {

@@ -2,8 +2,12 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.JPanel;
 
 public abstract class Piece {
 	protected int xCord;
@@ -16,7 +20,7 @@ public abstract class Piece {
 	protected Color pieceColor;
 	static int size = 75;
 	protected List<Move> moves = new ArrayList<>();
-
+	Image  image;
 	
 	boolean makeMove(int toX, int toY, Board board) {
 		Move move = new Move(xCord, yCord, toX, toY);
@@ -78,23 +82,20 @@ public abstract class Piece {
 	}
 	
 	
-	public void draw(Graphics g, boolean drag) {
+	public void draw(Graphics g, boolean drag, JPanel panel) {
 		if(this.alive()) {
 			g.setColor(pieceColor);
 			if(drag) {
-				g.drawString(this.pieceImage, this.xCord, this.yCord);
+				g.drawImage(image, xCord, yCord, 75, 75, panel);
 			}else {
-				g.drawString(this.pieceImage, this.xCord*size, (this.yCord+1)*size-10);				
+				g.drawImage(image, xCord*75, yCord*75, 75, 75, panel);
 			}
 		}
 	}
 	
-	public void draw2(Graphics g, boolean player, int x, int y) {
+	public void draw2(Graphics g, boolean player, int x, int y, JPanel panel) {
 		if(this.alive() && player == isWhite()) {
-			g.setColor(pieceColor);
-			g.setFont(new Font(Font.DIALOG, Font.BOLD, 85));
-			g.drawString(this.pieceImage, x - Piece.size/2, y + Piece.size/2);
-			
+			g.drawImage(image, x - Piece.size/2, y- Piece.size/2, 75, 75, panel);
 		}
 	}
 	

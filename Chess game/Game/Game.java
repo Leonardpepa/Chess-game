@@ -6,6 +6,8 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JPanel;
+
 
 
 public class Game {
@@ -26,14 +28,15 @@ public class Game {
 	
 	public Game() {
 		//starting position rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
+		new PieceImages();
 		loadFenPosition("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 	}
 	
-	public void draw(Graphics g, int x, int y) {
+	public void draw(Graphics g, int x, int y, JPanel panel) {
 		drawBoard(g);
-		drawPiece(g);
+		drawPiece(g, panel);
 		drawPossibleMoves(g);
-		drag(active,x, y ,g);
+		drag(active,x, y ,g, panel);
 	}
 	
 	public static void generateOnePlayerMoves() {
@@ -67,9 +70,9 @@ public class Game {
 		}
 	}
 	
-	public void drag(Piece piece, int x, int y, Graphics g) {
+	public void drag(Piece piece, int x, int y, Graphics g, JPanel panel) {
 		if(piece!=null && drag == true) {
-			piece.draw2(g, player, x, y);			
+			piece.draw2(g, player, x, y, panel);			
 		}
 	}
 	
@@ -145,10 +148,10 @@ public class Game {
 
 	}
 
-	public void drawPiece(Graphics g) {
+	public void drawPiece(Graphics g, JPanel panel) {
 		g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, Piece.size));
 		for (Piece p : AllPieces) {
-			p.draw(g, false);
+			p.draw(g, false, panel);
 		}
 
 	}

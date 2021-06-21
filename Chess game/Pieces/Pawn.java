@@ -11,6 +11,16 @@ public class Pawn extends Piece {
 		firstMove = true;
 		this.pieceImage = PieceImages.PAWN;
 	}
+	
+	public void intializeSide(int value){
+		super.intializeSide(value);
+		if(isWhite()) {
+			image = PieceImages.wp;
+		}
+		else {
+			image = PieceImages.bp;
+		}
+	}
 
 	@Override
 	boolean makeMove(int toX, int toY, Board sboard) {
