@@ -47,7 +47,7 @@ public class Panel extends JPanel {
 		public void mouseMoved(MouseEvent e) {
 			ti = e.getX()/Piece.size;
 			tj = e.getY()/Piece.size;
-			if(Game.board.getPiece(ti, tj) != null) {
+			if(Game.board.getPiece(ti, tj) != null || (game.active != null && game.active.canMove(ti, tj)))  {
 				setCursor(new Cursor(Cursor.HAND_CURSOR));
 			}
 			else {
