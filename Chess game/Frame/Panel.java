@@ -59,9 +59,12 @@ public class Panel extends JPanel {
 		
 		@Override
 		public void mouseDragged(MouseEvent e) {
+			if(!Game.drag && game.active != null) {
+				game.active = null;
+			}
 			if(SwingUtilities.isLeftMouseButton(e)) {
-				Game.drag = true;
 				game.selectPiece(e.getX()/Piece.size, e.getY()/Piece.size);
+				Game.drag = true;
 				xx = e.getX();
 				yy = e.getY();
 				revalidate();
