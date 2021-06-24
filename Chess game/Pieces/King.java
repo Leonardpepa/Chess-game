@@ -50,9 +50,9 @@ public class King extends Piece {
 		
 		if( j == 1 && i == 1 || (i+j) == 1) {
 			
-			if(kingsInCheck(x, y, board)) {
-				return false;
-			}
+//			if(kingsInCheck(x, y, board)) {
+//				return false;
+//			}
 			
 			if(board.getPiece(x, y) == null) {
 				return true;

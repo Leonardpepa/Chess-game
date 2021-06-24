@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -69,6 +70,7 @@ public class Game {
 		player = !player;
 		generateOnePlayerMoves(board);
 		generateAllEnemysMoves(board, AllPieces);
+		checkMate();
 	}
 
 	public void selectPiece(int x, int y) {
@@ -77,12 +79,31 @@ public class Game {
 			checkLegalMoves(active);
 		}
 	}
+	
+	public void checkMate() {
+		if(player) {
+			for(Piece p: wPieces) {
+				checkLegalMoves(p);
+				if(!p.getMoves().isEmpty()) {
+					return;
+				}
+			}
+		}else {
+			for(Piece p: bPieces) {
+				checkLegalMoves(p);
+				if(!p.getMoves().isEmpty()) {
+					return;
+				}
+			}
+		}
+		JOptionPane.showMessageDialog(null,"check mate " + (!player ? "white" : "black") + " wins");
+	}
 
 	public void checkLegalMoves(Piece piece) {
-		
+		mre = new ArrayList<Move>();
 		b = board.getNewBoard();
 		clonedActive = piece.getClone();
-
+		
 		for(Move move: clonedActive.getMoves()) {
 			b = board.getNewBoard();
 			clonedActive = piece.getClone();
@@ -92,7 +113,7 @@ public class Game {
 			List<Piece> enemyPieces = new ArrayList<Piece>();
 			Piece king = null;
 			
-			if(active.isWhite) {
+			if(piece.isWhite) {
 				enemyPieces = bPieces;
 				king = wk;
 			}
@@ -122,7 +143,7 @@ public class Game {
 		}
 		
 		for(Move move : mre) {
-			active.getMoves().remove(move);
+			piece.getMoves().remove(move);
 		}
 	}
 
@@ -142,7 +163,7 @@ public class Game {
 			active = null;
 		}
 	}
-
+	
 	public void drawBoard(Graphics g) {
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
