@@ -29,7 +29,7 @@ public class Rook extends Piece {
 	}
 
 	@Override
-	public boolean canMove(int x, int y) {
+	public boolean canMove(int x, int y, Board board) {
 
 		if (board.getPiece(x, y) != null && board.getPiece(x, y).isWhite() == isWhite()) {
 			return false;
@@ -74,7 +74,7 @@ public class Rook extends Piece {
 
 	}
 	
-	public void castleDone(int x) {
+	public void castleDone(int x, Board board) {
 		if(x == 6) {
 			board.updatePieces(xCord, yCord, x-1, yCord,this);
 			xCord = x-1;

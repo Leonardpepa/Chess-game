@@ -31,7 +31,7 @@ public class King extends Piece {
 				yCord = y;
 				if(rook != null && !this.hasMoved && !rook.HasMoved()) {
 					if(x == rook.getXcord() - 1 || x == rook.getXcord() + 2) {
-						rook.castleDone(xCord);
+						rook.castleDone(xCord, board);
 					}					
 				}
 				hasMoved = true;
@@ -42,12 +42,17 @@ public class King extends Piece {
 	}
 
 	@Override
-	public boolean canMove(int x, int y) {
+	public boolean canMove(int x, int y, Board board) {
 		
+			
 		int i = Math.abs(xCord - x);
 		int j = Math.abs(yCord - y);
 		
 		if( j == 1 && i == 1 || (i+j) == 1) {
+			
+			if(kingsInCheck(x, y, board)) {
+				return false;
+			}
 			
 			if(board.getPiece(x, y) == null) {
 				return true;
@@ -115,6 +120,14 @@ public class King extends Piece {
 		}
 	}
 	
-
+	public boolean kingsInCheck(int x, int y, Board board) {
+		for(Piece p: board.piecesList) {
+			if(p.isWhite() != isWhite() && p.canMove(x,  y, board)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	
 }
