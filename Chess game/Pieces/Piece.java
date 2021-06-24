@@ -106,7 +106,7 @@ public abstract class Piece implements Cloneable{
 		}
 	}
 	
-	public void fillAllPossibleMoves(Board b) {
+	public void fillAllPseudoLegalMoves(Board b) {
 		moves = new ArrayList<Move>();
 		for(int i=0; i<8; i++) {
 			for(int j=0; j<8; j++) {

@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class Game {
@@ -48,7 +49,7 @@ public class Game {
 		allPlayersMove = new ArrayList<Move>();
 		for (Piece p : AllPieces) {
 			if (p.isWhite() == player) {
-				p.fillAllPossibleMoves(board);
+				p.fillAllPseudoLegalMoves(board);
 				allPlayersMove.addAll(p.getMoves());
 			}
 		}
@@ -58,7 +59,7 @@ public class Game {
 		allEnemysMove = new ArrayList<Move>();
 		for (Piece p : AllPieces) {
 			if (p.isWhite() != player) {
-				p.fillAllPossibleMoves(board);
+				p.fillAllPseudoLegalMoves(board);
 				allEnemysMove.addAll(p.getMoves());
 			}
 		}
@@ -73,20 +74,18 @@ public class Game {
 	public void selectPiece(int x, int y) {
 		if (active == null && board.getPiece(x, y) != null && board.getPiece(x, y).isWhite() == player) {
 			active = board.getPiece(x, y);
-			checkLegalMoves();
+			checkLegalMoves(active);
 		}
 	}
 
-	public void checkLegalMoves() {
+	public void checkLegalMoves(Piece piece) {
 		
 		b = board.getNewBoard();
-		clonedActive = active.getClone();
-		if(active instanceof King) {
-			return;
-		}
+		clonedActive = piece.getClone();
+
 		for(Move move: clonedActive.getMoves()) {
 			b = board.getNewBoard();
-			clonedActive = active.getClone();
+			clonedActive = piece.getClone();
 			
 			clonedActive.makeMove(move.getToX(), move.getToY(), b);
 			
@@ -105,11 +104,16 @@ public class Game {
 			for (Piece enemyP : enemyPieces) {
 				
 				Piece clonedEnemyPiece = enemyP.getClone();
-				clonedEnemyPiece.fillAllPossibleMoves(b);
+				clonedEnemyPiece.fillAllPseudoLegalMoves(b);
 				
 				for (Move bMove : clonedEnemyPiece.getMoves()) {
-					if (bMove.getToX() == king.getXcord() && bMove.getToY() == king.getYcord() && b.getGrid()[enemyP.getXcord()][enemyP.getYcord()] == enemyP.getValueInTheboard()) {
+					if ( !(clonedActive instanceof King) && bMove.getToX() == king.getXcord() && bMove.getToY() == king.getYcord() && b.getGrid()[enemyP.getXcord()][enemyP.getYcord()] == enemyP.getValueInTheboard()) {
 						mre.add(move);
+					}
+					else if(clonedActive instanceof King) {
+						if(bMove.getToX() == clonedActive.getXcord() && bMove.getToY() == clonedActive.getYcord() && b.getGrid()[enemyP.getXcord()][enemyP.getYcord()] == enemyP.getValueInTheboard()) {
+							mre.add(move);
+						}
 					}
 				}
 
@@ -120,7 +124,6 @@ public class Game {
 		for(Move move : mre) {
 			active.getMoves().remove(move);
 		}
-
 	}
 
 	public void drag(Piece piece, int x, int y, Graphics g, JPanel panel) {
@@ -287,7 +290,5 @@ public class Game {
 			break;
 		}
 	}
-	
-
 
 }
