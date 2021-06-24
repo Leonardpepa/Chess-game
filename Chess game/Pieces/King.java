@@ -2,7 +2,7 @@
 public class King extends Piece {
 	private boolean hasMoved;
 	private Rook rook = null;
-	
+	public boolean isInCheck = false;
 	public King(int x, int y, boolean iswhite, Board board, int value) {
 		super(x, y, iswhite, board, value);
 		hasMoved = false;
@@ -25,7 +25,7 @@ public class King extends Piece {
 		}
 		for(Move m: moves) {
 			if(m.compareTo(move) == 0) {
-				getRook(x);
+				getRook(x, board);
 				board.updatePieces(xCord, yCord, x, y,this);
 				xCord = x;
 				yCord = y;
@@ -63,7 +63,7 @@ public class King extends Piece {
 		}
 		
 		
-		getRook(x);
+		getRook(x, board);
 		if(rook != null && (rook.HasMoved() || this.hasMoved)) {
 			return false;
 		}else if(rook != null){
@@ -93,7 +93,7 @@ public class King extends Piece {
 	
 	}
 	
-	private void getRook(int x) {
+	private void getRook(int x, Board board) {
 		if(isWhite()) {
 			if(x >= xCord) {
 				if(board.getPiece(7, 7) != null && board.getPiece(7, 7) instanceof Rook){
@@ -122,8 +122,11 @@ public class King extends Piece {
 	
 	public boolean kingsInCheck(int x, int y, Board board) {
 		for(Piece p: board.piecesList) {
-			if(p.isWhite() != isWhite() && p.canMove(x,  y, board)) {
-				return true;
+			if(p.isWhite() != isWhite()) {
+				if(p instanceof Pawn && ((Pawn) p).capture(x, y, board)) {
+					isInCheck = true;
+					return true;					
+				}
 			}
 		}
 		return false;
