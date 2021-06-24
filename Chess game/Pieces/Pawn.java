@@ -3,8 +3,9 @@ public class Pawn extends Piece {
 	private boolean firstMove;
 	private static boolean canEnPassant = false;
 	private boolean moved2Squares = false;
-	Pawn pawnRight = null;
-	Pawn pawnLeft = null;
+	private Pawn pawnRight = null;
+	private Pawn pawnLeft = null;
+	public static Piece lastPawnMoved;
 	
 	public Pawn(int x, int y, boolean iswhite, Board board, int value) {
 		super(x, y, iswhite, board, value);
@@ -23,7 +24,7 @@ public class Pawn extends Piece {
 	}
 
 	@Override
-	boolean makeMove(int toX, int toY, Board sboard) {
+	boolean makeMove(int toX, int toY, Board board) {
 		Move move = new Move(xCord, yCord, toX, toY);
 		if(!alive()) {
 			return false;
@@ -33,17 +34,16 @@ public class Pawn extends Piece {
 				if(firstMove && Math.abs(yCord - m.getToY()) == 2) {
 					canEnPassant = true;
 					moved2Squares = true;
-				}
-				else {
+				}else {
 					canEnPassant = false;
-					removePawnCapturedFromEnPassant(toX, toY);
-					removeEnpassantAtr();
+					removePawnCapturedFromEnPassant(toX, toY, board);
+					removeEnpassantAtr(board);
 				}
-				
 				board.updatePieces(xCord, yCord, toX, toY,this);
 				xCord = toX;
 				yCord = toY;				
 				firstMove = false;
+				lastPawnMoved = this;
 				return true;
 			}
 		}
@@ -62,7 +62,7 @@ public class Pawn extends Piece {
 		return false;
 	}
 
-	public boolean canMove(int x, int y) {
+	public boolean canMove(int x, int y, Board board) {
 	
 		if(xCord != 7 && board.getPiece(xCord + 1, yCord) != null && board.getPiece(xCord + 1, yCord) instanceof Pawn) {
 			pawnRight = board.getPiece(xCord + 1, yCord).isWhite() != this.isWhite()? (Pawn) board.getPiece(xCord + 1, yCord) : null;			
@@ -75,6 +75,7 @@ public class Pawn extends Piece {
 				}
 				
 			}
+			
 		}
 		if(xCord != 0 &&board.getPiece(xCord - 1, yCord) != null && board.getPiece(xCord - 1, yCord) instanceof Pawn) {
 			pawnLeft = board.getPiece(xCord - 1, yCord).isWhite() != this.isWhite()?  (Pawn) board.getPiece(xCord - 1, yCord): null;	
@@ -87,6 +88,7 @@ public class Pawn extends Piece {
 				}
 				
 			}
+			
 		}					
 	
 
@@ -114,14 +116,7 @@ public class Pawn extends Piece {
 				return true;
 			}
 			
-			//capture
-			if (y == yCord - 1 && x == xCord + 1) {
-				return true;
-			}
-			//capture
-			if (y == yCord - 1 && x == xCord - 1) {
-				return true;
-			}
+			return capture(x, y, board);
 
 		}
 		if (!isWhite) {
@@ -134,6 +129,25 @@ public class Pawn extends Piece {
 				return true;
 			}
 
+			return capture(x, y, board);
+		}
+
+		return false;
+	}
+
+
+	public boolean capture(int x, int y, Board board) {
+		if(isWhite()) {
+			//capture
+			if (y == yCord - 1 && x == xCord + 1) {
+				return true;
+			}
+			//capture
+			if (y == yCord - 1 && x == xCord - 1) {
+				return true;
+			}
+		}
+		else {
 			if (y == yCord + 1 && x == xCord + 1) {
 				return true;
 			}
@@ -141,11 +155,9 @@ public class Pawn extends Piece {
 				return true;
 			}
 		}
-
 		return false;
 	}
-
-
+		
 	public boolean isFirstMove() {
 		return firstMove;
 	}
@@ -162,15 +174,15 @@ public class Pawn extends Piece {
 		this.moved2Squares = moved2Squares;
 	}
 
-	public void removeEnpassantAtr() {
-		for(Piece piece: Game.AllPieces) {
-			if(piece instanceof Pawn) {
-				((Pawn) piece).setMoved2Squares(false);				
+	public void removeEnpassantAtr(Board board) {
+		for(Piece piece: board.piecesList) {
+			if(piece instanceof Pawn) {	
+				((Pawn) piece).setMoved2Squares(false);
 			}
 		}
 	}
 	
-	public void removePawnCapturedFromEnPassant(int x, int y) {
+	public void removePawnCapturedFromEnPassant(int x, int y, Board board) {
 		if(isWhite()) {
 			if(pawnLeft != null && x == pawnLeft.getXcord() && y + 1 == pawnLeft.getYcord() && pawnLeft.isMoved2Squares()) {
 				board.setXY(pawnLeft.getXcord(), pawnLeft.getYcord(), 0);

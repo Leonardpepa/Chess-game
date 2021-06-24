@@ -1,15 +1,13 @@
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JPanel;
 
-public abstract class Piece {
+public abstract class Piece implements Cloneable{
 	protected int xCord;
 	protected int yCord;
 	protected boolean isWhite;
@@ -38,7 +36,7 @@ public abstract class Piece {
 		return false;
 		
 	}
-	public abstract boolean canMove(int x ,int y);
+	public abstract boolean canMove(int x ,int y, Board board);
 
 	@SuppressWarnings("unlikely-arg-type")
 	public boolean alive() {
@@ -76,8 +74,13 @@ public abstract class Piece {
 		for(Move m: moves) {
 			g.setColor(Color.CYAN);
 			g.drawRect(m.getToX()*size, m.getToY()*size, size, size);
-			g2.setColor(Color.black);
-			g2.drawRect(m.getFromX()*size, m.getFromY()*size, size, size);
+			g2.setColor(Color.DARK_GRAY);
+			if(Game.drag) {
+				g2.fillRect(m.getFromX()*size, m.getFromY()*size, size, size);				
+			}
+			else {
+				g2.drawRect(m.getFromX()*size, m.getFromY()*size, size, size);
+			}
 		}
 	}
 	
@@ -86,24 +89,28 @@ public abstract class Piece {
 		if(this.alive()) {
 			g.setColor(pieceColor);
 			if(drag) {
-				g.drawImage(image, xCord, yCord, 75, 75, panel);
+				g.drawImage(image, xCord, yCord, Piece.size, Piece.size, panel);
 			}else {
-				g.drawImage(image, xCord*75, yCord*75, 75, 75, panel);
+				g.drawImage(image, xCord*Piece.size, yCord*Piece.size, Piece.size, Piece.size, panel);
 			}
+			panel.revalidate();
+			panel.repaint();
 		}
 	}
 	
 	public void draw2(Graphics g, boolean player, int x, int y, JPanel panel) {
 		if(this.alive() && player == isWhite()) {
-			g.drawImage(image, x - Piece.size/2, y- Piece.size/2, 75, 75, panel);
+			g.drawImage(image, x - Piece.size/2, y- Piece.size/2, Piece.size, Piece.size, panel);
+			panel.revalidate();
+			panel.repaint();
 		}
 	}
 	
-	public void fillAllPossibleMoves() {
+	public void fillAllPossibleMoves(Board b) {
 		moves = new ArrayList<Move>();
 		for(int i=0; i<8; i++) {
 			for(int j=0; j<8; j++) {
-				if(canMove(i, j)) {
+				if(canMove(i, j, b)) {
 					moves.add(new Move(xCord, yCord, i, j));
 				}
 			}
@@ -153,6 +160,14 @@ public abstract class Piece {
 	}
 	public void setMoves(List<Move> moves) {
 		this.moves = moves;
+	}
+	public Piece getClone() {
+		try {
+			return (Piece) this.clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 }

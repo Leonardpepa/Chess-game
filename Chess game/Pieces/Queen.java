@@ -20,23 +20,23 @@ public class Queen extends Piece {
 
 
 	@Override
-	public boolean canMove(int x, int y) {
+	public boolean canMove(int x, int y, Board board) {
 			
 			if(board.getPiece(x, y) != null && board.getPiece(x, y).isWhite() == isWhite()) {
 				return false;
 			}
 		
 			if(Math.abs(x-xCord) == Math.abs( y-yCord)) {
-				return (queenMovesDiagonial(x, y));
+				return (queenMovesDiagonial(x, y, board));
 			}
 			if( x == xCord  || y == yCord ) {
-				return queenMovesStraight(x, y);
+				return queenMovesStraight(x, y, board);
 			}
 			
 		return false;
 	}
 	
-	public boolean queenMovesStraight(int x,int y) {
+	public boolean queenMovesStraight(int x,int y, Board board) {
 			if(x == xCord && (y<yCord )) {
 					for(int i=yCord-1; i>y;i--) {
 						if(board.getXY(x, i) != 0) {
@@ -78,7 +78,7 @@ public class Queen extends Piece {
 		
 	}
 	
-	public boolean queenMovesDiagonial(int x,int y) {
+	public boolean queenMovesDiagonial(int x,int y, Board board) {
 		if(x > xCord && y > yCord) {
 			int j = yCord+1;
 			for(int i=xCord+1; i<x; i++) {

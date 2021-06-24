@@ -16,7 +16,7 @@ public class Knight extends Piece{
 			image = PieceImages.bn;
 		}
 	}
-	public boolean canMove(int x ,int y) {
+	public boolean canMove(int x ,int y, Board board) {
 			
 			if((board.getPiece(x, y) != null && board.getPiece(x, y).isWhite() == isWhite())) {
 					return false;

@@ -8,85 +8,138 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-
-
 public class Game {
 	static Board board = new Board();
-	static Piece[] pawnW = new Pawn[8];
-	static Piece[] pawnB = new Pawn[8];
+
+	static Piece wk;
+	static Piece bk;
+	static ArrayList<Piece> wPieces = new ArrayList<Piece>();
+	static ArrayList<Piece> bPieces = new ArrayList<Piece>();
 
 	static boolean player = true;
 	Piece active = null;
-	boolean isSelected = false;
+	public static boolean drag = false;
 	static ArrayList<Piece> AllPieces = new ArrayList<Piece>();
 
 	ArrayList<Move> allPossiblesMoves = new ArrayList<Move>();
-	public static boolean drag = false;
-	
+
 	static List<Move> allPlayersMove = new ArrayList<Move>();
 	static List<Move> allEnemysMove = new ArrayList<Move>();
+	Board b;
+	Piece clonedActive;
+	List<Move> mre = new ArrayList<Move>();
 	
 	public Game() {
-		//starting position rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
+		// starting position rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
 		new PieceImages();
 		loadFenPosition("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+		fillPieces();
+		generateOnePlayerMoves(board);
 	}
-	
+
 	public void draw(Graphics g, int x, int y, JPanel panel) {
 		drawBoard(g);
 		drawPiece(g, panel);
 		drawPossibleMoves(g);
-		drag(active,x, y ,g, panel);
+		drag(active, x, y, g, panel);
 	}
-	
-	public static void generateOnePlayerMoves() {
+
+	public static void generateOnePlayerMoves(Board board) {
 		allPlayersMove = new ArrayList<Move>();
-		for(Piece p: AllPieces) {
-			if(p.isWhite() == player) {
-				p.fillAllPossibleMoves();
+		for (Piece p : AllPieces) {
+			if (p.isWhite() == player) {
+				p.fillAllPossibleMoves(board);
 				allPlayersMove.addAll(p.getMoves());
 			}
 		}
 	}
-	
-	public static void generateAllEnemysMoves() {
+
+	public static void generateAllEnemysMoves(Board board, List<Piece> AllPieces) {
 		allEnemysMove = new ArrayList<Move>();
-		for(Piece p: AllPieces) {
-			if(p.isWhite() != player) {
-				p.fillAllPossibleMoves();
-				allPlayersMove.addAll(p.getMoves());
+		for (Piece p : AllPieces) {
+			if (p.isWhite() != player) {
+				p.fillAllPossibleMoves(board);
+				allEnemysMove.addAll(p.getMoves());
 			}
 		}
 	}
 
 	public void changeSide() {
 		player = !player;
+		generateOnePlayerMoves(board);
+		generateAllEnemysMoves(board, AllPieces);
 	}
-	
+
 	public void selectPiece(int x, int y) {
-		if(active == null && board.getPiece(x, y) != null && board.getPiece(x, y).isWhite() == player) {
+		if (active == null && board.getPiece(x, y) != null && board.getPiece(x, y).isWhite() == player) {
 			active = board.getPiece(x, y);
-			active.fillAllPossibleMoves();
+			checkLegalMoves();
 		}
 	}
-	
+
+	public void checkLegalMoves() {
+		
+		b = board.getNewBoard();
+		clonedActive = active.getClone();
+		if(active instanceof King) {
+			return;
+		}
+		for(Move move: clonedActive.getMoves()) {
+			b = board.getNewBoard();
+			clonedActive = active.getClone();
+			
+			clonedActive.makeMove(move.getToX(), move.getToY(), b);
+			
+			List<Piece> enemyPieces = new ArrayList<Piece>();
+			Piece king = null;
+			
+			if(active.isWhite) {
+				enemyPieces = bPieces;
+				king = wk;
+			}
+			else {
+				enemyPieces = wPieces;
+				king = bk;
+			}
+			
+			for (Piece enemyP : enemyPieces) {
+				
+				Piece clonedEnemyPiece = enemyP.getClone();
+				clonedEnemyPiece.fillAllPossibleMoves(b);
+				
+				for (Move bMove : clonedEnemyPiece.getMoves()) {
+					if (bMove.getToX() == king.getXcord() && bMove.getToY() == king.getYcord() && b.getGrid()[enemyP.getXcord()][enemyP.getYcord()] == enemyP.getValueInTheboard()) {
+						mre.add(move);
+					}
+				}
+
+			}
+			
+		}
+		
+		for(Move move : mre) {
+			active.getMoves().remove(move);
+		}
+
+	}
+
 	public void drag(Piece piece, int x, int y, Graphics g, JPanel panel) {
-		if(piece!=null && drag == true) {
-			piece.draw2(g, player, x, y, panel);			
+		if (piece != null && drag == true) {
+			piece.draw2(g, player, x, y, panel);
 		}
 	}
-	
+
 	public void move(int x, int y) {
-		if(active != null) {
-			if(active.makeMove(x, y, board)) {
+		if (active != null) {
+			if (active.makeMove(x, y, board)) {
 				tryToPromote(active);
 				changeSide();
 			}
 			drag = false;
-			active  = null;
+			active = null;
 		}
 	}
-	
+
 	public void drawBoard(Graphics g) {
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
@@ -99,44 +152,51 @@ public class Game {
 			}
 		}
 	}
-	
-	
+
 	public void tryToPromote(Piece p) {
-		if(p instanceof Pawn) {
-			if(((Pawn)p).madeToTheEnd()) {
+		if (p instanceof Pawn) {
+			if (((Pawn) p).madeToTheEnd()) {
 				PromotionFrame.popUpPieces(p.pieceColor, p);
 			}
 		}
 	}
-	
+
 	public static void choosePiece(Piece p, int choice) {
 		switch (choice) {
 		case 0:
 			AllPieces.remove(p);
-			p = new Queen(p.getXcord(), p.getYcord(), p.isWhite(), board, p.isWhite() ? 8: -8);					
+			p = new Queen(p.getXcord(), p.getYcord(), p.isWhite(), board, p.isWhite() ? 8 : -8);
 			AllPieces.add(p);
+			
 			break;
 		case 1:
 			AllPieces.remove(p);
-			p = new Rook(p.getXcord(), p.getYcord(), p.isWhite(), board, p.isWhite() ? 5: -5);
+			if(p.isWhite()) {
+				wPieces.remove(p);
+			}
+			else {
+				bPieces.remove(p);
+			}
+			p = new Rook(p.getXcord(), p.getYcord(), p.isWhite(), board, p.isWhite() ? 5 : -5);
 			AllPieces.add(p);
 			break;
 		case 2:
 			AllPieces.remove(p);
-			p = new Knight(p.getXcord(), p.getYcord(), p.isWhite(), board, p.isWhite() ? 3: -3);
+			p = new Knight(p.getXcord(), p.getYcord(), p.isWhite(), board, p.isWhite() ? 3 : -3);
 			AllPieces.add(p);
 			break;
-		case 3: 
+		case 3:
 			AllPieces.remove(p);
-			p = new Bishop(p.getXcord(), p.getYcord(), p.isWhite(), board, p.isWhite() ? 3: -3);
+			p = new Bishop(p.getXcord(), p.getYcord(), p.isWhite(), board, p.isWhite() ? 3 : -3);
 			AllPieces.add(p);
 			break;
 		default:
 			AllPieces.remove(p);
-			p = new Queen(p.getXcord(), p.getYcord(), p.isWhite(), board, p.isWhite() ? 8: -8);
+			p = new Queen(p.getXcord(), p.getYcord(), p.isWhite(), board, p.isWhite() ? 8 : -8);
 			AllPieces.add(p);
 			break;
 		}
+		fillPieces();
 	}
 
 	public void drawPossibleMoves(Graphics g) {
@@ -155,40 +215,50 @@ public class Game {
 		}
 
 	}
-	
+
 	public void loadFenPosition(String fenString) {
-		//rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
+		// rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
 		String[] parts = fenString.split(" ");
 		String position = parts[0];
 		int row = 0, col = 0;
-		for(char c: position.toCharArray()) {
-			if(c == '/') {
+		for (char c : position.toCharArray()) {
+			if (c == '/') {
 				row++;
 				col = 0;
 			}
-			if(Character.isLetter(c)){
-				if(Character.isLowerCase(c)) {
+			if (Character.isLetter(c)) {
+				if (Character.isLowerCase(c)) {
 					addToBoard(col, row, c, false);
-				}
-				else {
+				} else {
 					addToBoard(col, row, c, true);
 				}
 				col++;
 			}
-			if(Character.isDigit(c)) {
+			if (Character.isDigit(c)) {
 				col += Integer.parseInt(String.valueOf(c));
 			}
 		}
-		
-		if(parts[1].equals("w")) {
+
+		if (parts[1].equals("w")) {
 			player = true;
-		}
-		else {
+		} else {
 			player = false;
 		}
-		
+
 	}
-	
+
+	private static void fillPieces() {
+		wPieces = new ArrayList<Piece>();
+		bPieces = new ArrayList<Piece>();
+		for (Piece p : AllPieces) {
+			if (p.isWhite()) {
+				wPieces.add(p);
+			} else {
+				bPieces.add(p);
+			}
+		}
+	}
+
 	public void addToBoard(int x, int y, char c, boolean isWhite) {
 		switch (String.valueOf(c).toUpperCase()) {
 		case "R":
@@ -204,12 +274,20 @@ public class Game {
 			AllPieces.add(new Queen(x, y, isWhite, board, isWhite ? 8 : -8));
 			break;
 		case "K":
-			AllPieces.add(new King(x, y, isWhite, board, isWhite ? 100 : -100));
+			Piece king = new King(x, y, isWhite, board, isWhite ? 10 : -10);
+			AllPieces.add(king);
+			if (isWhite) {
+				wk = king;
+			} else {
+				bk = king;
+			}
 			break;
 		case "P":
 			AllPieces.add(new Pawn(x, y, isWhite, board, isWhite ? 1 : -1));
 			break;
 		}
 	}
+	
+
 
 }

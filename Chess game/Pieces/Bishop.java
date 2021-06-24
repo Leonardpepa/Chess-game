@@ -17,19 +17,19 @@ public class Bishop extends Piece {
 		}
 	}
 	@Override
-	public boolean canMove(int x, int y) {
+	public boolean canMove(int x, int y, Board board) {
 			
 			if(board.getPiece(x, y) != null && board.getPiece(x, y).isWhite() == isWhite()) {
 				return false;
 			}
 		
 			if(Math.abs(x-xCord) == Math.abs( y-yCord)) {
-				return bishopMoves(x, y);
+				return bishopMoves(x, y, board);
 			}
 		return false;
 	}
 	
-	public boolean bishopMoves(int x,int y) {
+	public boolean bishopMoves(int x,int y, Board board) {
 		if(x > xCord && y > yCord) {
 			int j = yCord+1;
 			for(int i=xCord+1; i<x; i++) {
