@@ -11,7 +11,7 @@ public class Frame extends JFrame {
 		
 		
 		this.setContentPane(new  Panel());
-		this.setTitle("nah");
+		this.setTitle("Chess");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
 		this.setVisible(true);
