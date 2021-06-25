@@ -5,7 +5,6 @@ public class Pawn extends Piece {
 	private boolean moved2Squares = false;
 	private Pawn pawnRight = null;
 	private Pawn pawnLeft = null;
-	public static Piece lastPawnMoved;
 	
 	public Pawn(int x, int y, boolean iswhite, Board board, int value) {
 		super(x, y, iswhite, board, value);
@@ -43,7 +42,6 @@ public class Pawn extends Piece {
 				xCord = toX;
 				yCord = toY;				
 				firstMove = false;
-				lastPawnMoved = this;
 				return true;
 			}
 		}

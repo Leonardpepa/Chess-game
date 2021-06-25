@@ -28,6 +28,8 @@ public class Board implements Cloneable{
 		if(pieces[toX][toY] != null) {
 			died = pieces[toX][toY];
 			piecesList.remove(died);
+			Game.AllPieces.remove(died);
+			Game.fillPieces();
 		}
 		grid[fromX][fromY] = 0;
 		grid[toX][toY] =  piece.getValueInTheboard();

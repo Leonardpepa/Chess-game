@@ -44,15 +44,10 @@ public class King extends Piece {
 	@Override
 	public boolean canMove(int x, int y, Board board) {
 		
-			
 		int i = Math.abs(xCord - x);
 		int j = Math.abs(yCord - y);
 		
 		if( j == 1 && i == 1 || (i+j) == 1) {
-			
-//			if(kingsInCheck(x, y, board)) {
-//				return false;
-//			}
 			
 			if(board.getPiece(x, y) == null) {
 				return true;
@@ -66,10 +61,17 @@ public class King extends Piece {
 		getRook(x, board);
 		if(rook != null && (rook.HasMoved() || this.hasMoved)) {
 			return false;
-		}else if(rook != null){
+		}
+		else if(rook != null){
+			
 			for(int k=xCord + 1; k<rook.getXcord(); k++) {
 				if(board.getPiece(k, yCord) != null) {
 					return false;
+				}
+				for(Move m: Game.allEnemysMove) {
+					if((m.getToX() == k || m.getToX() == xCord) && m.getToY() == yCord) {
+						return false;
+					}
 				}
 			}	
 			if(x == rook.getXcord() - 1 && y == yCord) {
@@ -79,6 +81,11 @@ public class King extends Piece {
 			for(int k=xCord - 1; k>rook.getXcord(); k--) {
 				if(board.getPiece(k, yCord) != null) {
 					return false;
+				}
+				for(Move m: Game.allEnemysMove) {
+					if((m.getToX() == k || m.getToX() == xCord) && m.getToY() == yCord) {
+						return false;
+					}
 				}
 			}
 			if(x == rook.getXcord() + 2 && y == yCord) {
@@ -120,17 +127,12 @@ public class King extends Piece {
 		}
 	}
 	
-	public boolean kingsInCheck(int x, int y, Board board) {
-		for(Piece p: board.piecesList) {
-			if(p.isWhite() != isWhite()) {
-				if(p instanceof Pawn && ((Pawn) p).capture(x, y, board)) {
-					isInCheck = true;
-					return true;					
-				}
+	public boolean isInCheck() {
+		for(Move m: Game.allEnemysMove) {
+			if(m.getToX() == xCord && m.getToY() == yCord) {
+				return true;
 			}
 		}
 		return false;
 	}
-	
-	
 }
