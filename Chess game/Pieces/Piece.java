@@ -72,8 +72,12 @@ public abstract class Piece implements Cloneable{
 		Graphics2D g2 = (Graphics2D) g;
 		
 		for(Move m: moves) {
-			g.setColor(Color.CYAN);
-			g.drawRect(m.getToX()*size, m.getToY()*size, size, size);
+			if(board.getPiece(m.getToX(), m.getToY()) != null && board.getPiece(m.getToX(), m.getToY()).isWhite() != isWhite()) {
+				g.setColor(Color.ORANGE);
+			}else {
+				g.setColor(Color.DARK_GRAY);
+			}
+			g.fillOval((m.getToX()*size) + size/3, (m.getToY()*size) + size/3, size/3, size/3);
 			g2.setColor(Color.DARK_GRAY);
 			if(Game.drag) {
 				g2.fillRect(m.getFromX()*size, m.getFromY()*size, size, size);				
@@ -86,24 +90,15 @@ public abstract class Piece implements Cloneable{
 	
 	
 	public void draw(Graphics g, boolean drag, JPanel panel) {
-		if(this.alive()) {
-			g.setColor(pieceColor);
-			if(drag) {
-				g.drawImage(image, xCord, yCord, Piece.size, Piece.size, panel);
-			}else {
-				g.drawImage(image, xCord*Piece.size, yCord*Piece.size, Piece.size, Piece.size, panel);
-			}
+			g.drawImage(image, xCord*Piece.size, yCord*Piece.size, Piece.size, Piece.size, panel);
 			panel.revalidate();
 			panel.repaint();
-		}
 	}
 	
 	public void draw2(Graphics g, boolean player, int x, int y, JPanel panel) {
-		if(this.alive() && player == isWhite()) {
 			g.drawImage(image, x - Piece.size/2, y- Piece.size/2, Piece.size, Piece.size, panel);
 			panel.revalidate();
 			panel.repaint();
-		}
 	}
 	
 	public void fillAllPseudoLegalMoves(Board b) {

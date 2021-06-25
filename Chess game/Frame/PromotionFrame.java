@@ -26,6 +26,7 @@ public class PromotionFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Game.choosePiece(p, 1);
+				Game.checkPlayersLegalMoves();
 				frame.dispose();
 			}
 		});
@@ -39,6 +40,7 @@ public class PromotionFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Game.choosePiece(p, 0);
+				Game.checkPlayersLegalMoves();
 				frame.dispose();
 			}
 		});
@@ -51,6 +53,7 @@ public class PromotionFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Game.choosePiece(p, 2);
+				Game.checkPlayersLegalMoves();
 				frame.dispose();
 			}
 		});
@@ -63,6 +66,7 @@ public class PromotionFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Game.choosePiece(p, 3);
+				Game.checkPlayersLegalMoves();
 				frame.dispose();
 			}
 		});

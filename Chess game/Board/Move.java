@@ -49,6 +49,13 @@ public class Move implements Comparable<Move>{
 		return -1;
 	}
 	
+	public boolean equals(Object o) {
+		Move otherM = (Move) o;
+		if(this.getToX() == otherM.getToX() && this.getToY() == otherM.getToY() && this.getFromX() == otherM.getFromX() && this.getFromY() == otherM.getFromY()){
+			return true;
+		}
+		return false;
+	}
 	
 	
 }
