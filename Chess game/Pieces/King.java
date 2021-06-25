@@ -2,7 +2,7 @@
 public class King extends Piece {
 	private boolean hasMoved;
 	private Rook rook = null;
-	public boolean isInCheck = false;
+	
 	public King(int x, int y, boolean iswhite, Board board, int value) {
 		super(x, y, iswhite, board, value);
 		hasMoved = false;
