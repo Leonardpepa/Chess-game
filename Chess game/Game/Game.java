@@ -10,8 +10,8 @@ import javax.swing.JPanel;
 public class Game {
 	static Board board = new Board();
 
-	static Piece wk;
-	static Piece bk;
+	static King wk;
+	static King bk;
 	static ArrayList<Piece> wPieces = new ArrayList<Piece>();
 	static ArrayList<Piece> bPieces = new ArrayList<Piece>();
 
@@ -46,6 +46,7 @@ public class Game {
 		drawPiece(g, panel);
 		drawPossibleMoves(g, panel);
 		drag(active, x, y, g, panel);
+		drawKingInCheck(player, g, panel);
 	}
 
 	public static void generateOnePlayerMoves(Board board) {
@@ -98,7 +99,7 @@ public class Game {
 			}
 		}
 		if(player) {
-			if(((King)wk).isInCheck()){
+			if(wk.isInCheck()){
 				JOptionPane.showMessageDialog(null,"check mate " + (!player ? "white" : "black") + " wins");				
 			}else {
 				JOptionPane.showMessageDialog(null,"stalemate ");				
@@ -106,7 +107,7 @@ public class Game {
 			}
 		}
 		else {
-			if(((King)bk).isInCheck()){
+			if(bk.isInCheck()){
 				JOptionPane.showMessageDialog(null,"check mate " + (!player ? "white" : "black") + " wins");				
 			}else {
 				JOptionPane.showMessageDialog(null,"stalemate ");				
@@ -191,6 +192,18 @@ public class Game {
 			drag = false;
 			active = null;
 		}
+	}
+	
+	public void drawKingInCheck(boolean isWhite, Graphics g, JPanel panel) {
+		g.setColor(Color.RED);
+		if(isWhite && wk.isInCheck()) {
+			g.drawRect(wk.getXcord()*Piece.size, wk.getYcord()*Piece.size, Piece.size, Piece.size);
+		}else if(bk.isInCheck()) {
+			g.drawRect(bk.getXcord()*Piece.size, bk.getYcord()*Piece.size, Piece.size, Piece.size);
+		}
+		
+		panel.revalidate();
+		panel.repaint();
 	}
 	
 	public void drawBoard(Graphics g) {
@@ -325,7 +338,7 @@ public class Game {
 			AllPieces.add(new Queen(x, y, isWhite, board, isWhite ? 8 : -8));
 			break;
 		case "K":
-			Piece king = new King(x, y, isWhite, board, isWhite ? 10 : -10);
+			King king = new King(x, y, isWhite, board, isWhite ? 10 : -10);
 			AllPieces.add(king);
 			if (isWhite) {
 				wk = king;
