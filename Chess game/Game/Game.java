@@ -44,7 +44,7 @@ public class Game {
 	public void draw(Graphics g, int x, int y, JPanel panel) {
 		drawBoard(g);
 		drawPiece(g, panel);
-		drawPossibleMoves(g);
+		drawPossibleMoves(g, panel);
 		drag(active, x, y, g, panel);
 	}
 
@@ -252,11 +252,11 @@ public class Game {
 		fillPieces();
 	}
 
-	public void drawPossibleMoves(Graphics g) {
+	public void drawPossibleMoves(Graphics g, JPanel panel) {
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setStroke(new BasicStroke(3));
 		if (active != null) {
-			active.showMoves(g2);
+			active.showMoves(g2, panel);
 		}
 
 	}
@@ -269,7 +269,6 @@ public class Game {
 	}
 
 	public void loadFenPosition(String fenString) {
-		// rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
 		String[] parts = fenString.split(" ");
 		String position = parts[0];
 		int row = 0, col = 0;

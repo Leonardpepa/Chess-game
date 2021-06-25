@@ -67,7 +67,7 @@ public abstract class Piece implements Cloneable{
 		board.setPieceIntoBoard(x, y, this);
 	}
 	
-	public void showMoves(Graphics g) {
+	public void showMoves(Graphics g, JPanel panel) {
 		
 		Graphics2D g2 = (Graphics2D) g;
 		
@@ -86,6 +86,8 @@ public abstract class Piece implements Cloneable{
 				g2.drawRect(m.getFromX()*size, m.getFromY()*size, size, size);
 			}
 		}
+		panel.revalidate();
+		panel.repaint();
 	}
 	
 	
