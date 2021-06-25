@@ -29,9 +29,8 @@ public class Game {
 	static List<Move> mre = new ArrayList<Move>();
 	
 	public Game() {
-		// starting position rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
 		new PieceImages();
-		loadFenPosition("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
+		loadFenPosition("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 		start();
 	}
 	
