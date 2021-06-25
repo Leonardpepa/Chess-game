@@ -31,7 +31,7 @@ public class Game {
 	public Game() {
 		// starting position rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
 		new PieceImages();
-		loadFenPosition("3b3k/p6p/1p5P/3q4/8/n7/PP6/K4Q2 w - - 0 1");
+		loadFenPosition("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
 		start();
 	}
 	
