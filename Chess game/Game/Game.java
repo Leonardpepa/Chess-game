@@ -75,7 +75,6 @@ public class Game {
 		generateOnePlayerMoves(board);
 		checkPlayersLegalMoves();
 		checkMate();
-		
 	}
 
 	public void selectPiece(int x, int y) {
