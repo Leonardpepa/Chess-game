@@ -9,5 +9,5 @@
 * enpassant rule works
 
 # TODO
-* impement and ai to play the game
+* impement ai to play the game
 * refactoring because the code is a mess
