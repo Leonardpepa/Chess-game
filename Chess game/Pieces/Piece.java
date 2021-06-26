@@ -18,7 +18,7 @@ public abstract class Piece implements Cloneable{
 	protected Color pieceColor;
 	static int size = 80;
 	protected List<Move> moves = new ArrayList<>();
-	Image  image;
+	protected Image  image;
 	
 	boolean makeMove(int toX, int toY, Board board) {
 		Move move = new Move(xCord, yCord, toX, toY);

@@ -18,9 +18,14 @@ public class Board implements Cloneable{
 	
 
 	public void setPieceIntoBoard(int x,int y,Piece piece) {
-		grid[x][y] = piece.getValueInTheboard();
-		pieces[x][y] = piece;
-		piecesList.add(piece);
+		if(piece != null) {
+			grid[x][y] = piece.getValueInTheboard();
+			pieces[x][y] = piece;
+			piecesList.add(piece);			
+		}else {
+			grid[x][y] = 0;
+			pieces[x][y] = null;
+		}
 	}	
 	public void updatePieces(int fromX,int fromY,int toX,int toY,Piece piece) {
 		lastMove = new Move(fromX, fromY, toX, toY);

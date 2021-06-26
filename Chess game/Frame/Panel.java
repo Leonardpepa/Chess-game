@@ -34,17 +34,18 @@ public class Panel extends JPanel {
 	class Listener extends MouseAdapter{
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			int x = e.getX()/Piece.size;
-			int y = e.getY()/Piece.size;
-			Game.drag = false;
-			game.active = null;
-			game.selectPiece(x, y);
-			revalidate();
-			repaint();
+			if(SwingUtilities.isLeftMouseButton(e)) {
+				int x = e.getX()/Piece.size;
+				int y = e.getY()/Piece.size;
+				Game.drag = false;
+				game.active = null;
+				game.selectPiece(x, y);
+			}
 		}
 		
 		@Override
 		public void mouseMoved(MouseEvent e) {
+			// temp index i and j for the gui
 			ti = e.getX()/Piece.size;
 			tj = e.getY()/Piece.size;
 			if(Game.board.getPiece(ti, tj) != null)  {
@@ -53,8 +54,6 @@ public class Panel extends JPanel {
 			else {
 				setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 			}
-			revalidate();
-			repaint();
 		}
 		
 		@Override
@@ -66,9 +65,7 @@ public class Panel extends JPanel {
 				game.selectPiece(e.getX()/Piece.size, e.getY()/Piece.size);
 				Game.drag = true;
 				xx = e.getX();
-				yy = e.getY();
-				revalidate();
-				repaint();				
+				yy = e.getY();				
 			}
 		}
 		
@@ -77,8 +74,6 @@ public class Panel extends JPanel {
 			int x = e.getX() / Piece.size;
 			int y = e.getY() / Piece.size;
 			game.move(x, y);
-			revalidate();
-			repaint();
 		}
 
 	}
