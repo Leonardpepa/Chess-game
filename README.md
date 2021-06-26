@@ -5,7 +5,7 @@
 * stalemate works
 * castling the king  works 
 * capture pieces works
-* promote pawn to night/bishop/queen/rook works
+* promote pawn to knight/bishop/queen/rook works
 * enpassant rule works
 
 # TODO
