@@ -16,7 +16,7 @@ public abstract class Piece implements Cloneable{
 	protected Board board;
 	protected String pieceImage;
 	protected Color pieceColor;
-	static int size = 75;
+	static int size = 80;
 	protected List<Move> moves = new ArrayList<>();
 	Image  image;
 	

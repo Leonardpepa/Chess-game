@@ -4,8 +4,8 @@ import java.awt.Dimension;
 public class Frame extends JFrame {
 	
 	private static final long serialVersionUID = -4442947819954124379L;
-	public static final int WIDTH = 600;
-	public static final int HEIGTH = 600;
+	public static final int WIDTH = 640;
+	public static final int HEIGTH = 640;
 	
 	public Frame() {
 		
