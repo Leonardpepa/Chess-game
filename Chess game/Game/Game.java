@@ -24,9 +24,6 @@ public class Game {
 
 	static List<Move> allPlayersMove = new ArrayList<Move>();
 	static List<Move> allEnemysMove = new ArrayList<Move>();
-	static Board b;
-	static Piece clonedActive;
-	static List<Move> mre = new ArrayList<Move>();
 	
 	public Game() {
 		new PieceImages();
@@ -36,8 +33,8 @@ public class Game {
 	
 	public void start() {
 		fillPieces();
-		generateOnePlayerMoves(board);
-		generateAllEnemysMoves(board);
+		generatePlayersTurnMoves(board);
+		generateEnemysMoves(board);
 		checkPlayersLegalMoves();
 	}
 
@@ -49,7 +46,7 @@ public class Game {
 		drawKingInCheck(player, g, panel);
 	}
 
-	public static void generateOnePlayerMoves(Board board) {
+	public static void generatePlayersTurnMoves(Board board) {
 		allPlayersMove = new ArrayList<Move>();
 		for (Piece p : AllPieces) {
 			if (p.isWhite() == player) {
@@ -59,7 +56,7 @@ public class Game {
 		}
 	}
 
-	public static void generateAllEnemysMoves(Board board) {
+	public static void generateEnemysMoves(Board board) {
 		allEnemysMove = new ArrayList<Move>();
 		for (Piece p : AllPieces) {
 			if (p.isWhite() != player) {
@@ -71,8 +68,8 @@ public class Game {
 
 	public void changeSide() {
 		player = !player;
-		generateAllEnemysMoves(board);
-		generateOnePlayerMoves(board);
+		generateEnemysMoves(board);
+		generatePlayersTurnMoves(board);
 		checkPlayersLegalMoves();
 		checkMate();
 	}
@@ -129,15 +126,15 @@ public class Game {
 	}
 
 	public static void checkLegalMoves(Piece piece) {
-		mre = new ArrayList<Move>();
-		b = board.getNewBoard();
-		clonedActive = piece.getClone();
+		List<Move> movesToRemove = new ArrayList<Move>();
+		Board clonedBoard = board.getNewBoard();
+		Piece clonedActive = piece.getClone();
 		
 		for(Move move: clonedActive.getMoves()) {
-			b = board.getNewBoard();
+			clonedBoard = board.getNewBoard();
 			clonedActive = piece.getClone();
 			
-			clonedActive.makeMove(move.getToX(), move.getToY(), b);
+			clonedActive.makeMove(move.getToX(), move.getToY(), clonedBoard);
 			
 			List<Piece> enemyPieces = new ArrayList<Piece>();
 			Piece king = null;
@@ -154,15 +151,15 @@ public class Game {
 			for (Piece enemyP : enemyPieces) {
 				
 				Piece clonedEnemyPiece = enemyP.getClone();
-				clonedEnemyPiece.fillAllPseudoLegalMoves(b);
+				clonedEnemyPiece.fillAllPseudoLegalMoves(clonedBoard);
 				
 				for (Move bMove : clonedEnemyPiece.getMoves()) {
-					if ( !(clonedActive instanceof King) && bMove.getToX() == king.getXcord() && bMove.getToY() == king.getYcord() && b.getGrid()[enemyP.getXcord()][enemyP.getYcord()] == enemyP.getValueInTheboard()) {
-						mre.add(move);
+					if ( !(clonedActive instanceof King) && bMove.getToX() == king.getXcord() && bMove.getToY() == king.getYcord() && clonedBoard.getGrid()[enemyP.getXcord()][enemyP.getYcord()] == enemyP.getValueInTheboard()) {
+						movesToRemove.add(move);
 					}
 					else if(clonedActive instanceof King) {
-						if(bMove.getToX() == clonedActive.getXcord() && bMove.getToY() == clonedActive.getYcord() && b.getGrid()[enemyP.getXcord()][enemyP.getYcord()] == enemyP.getValueInTheboard()) {
-							mre.add(move);
+						if(bMove.getToX() == clonedActive.getXcord() && bMove.getToY() == clonedActive.getYcord() && clonedBoard.getGrid()[enemyP.getXcord()][enemyP.getYcord()] == enemyP.getValueInTheboard()) {
+							movesToRemove.add(move);
 						}
 					}
 				}
@@ -171,7 +168,7 @@ public class Game {
 			
 		}
 		
-		for(Move move : mre) {
+		for(Move move : movesToRemove) {
 			piece.getMoves().remove(move);
 		}
 	}
@@ -200,7 +197,6 @@ public class Game {
 		}else if(bk.isInCheck()) {
 			g.drawRect(bk.getXcord()*Piece.size, bk.getYcord()*Piece.size, Piece.size, Piece.size);
 		}
-		
 		panel.revalidate();
 		panel.repaint();
 	}
@@ -236,12 +232,6 @@ public class Game {
 			break;
 		case 1:
 			AllPieces.remove(p);
-			if(p.isWhite()) {
-				wPieces.remove(p);
-			}
-			else {
-				bPieces.remove(p);
-			}
 			p = new Rook(p.getXcord(), p.getYcord(), p.isWhite(), board, p.isWhite() ? 5 : -5);
 			AllPieces.add(p);
 			break;
