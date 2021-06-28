@@ -21,7 +21,7 @@ public class Pawn extends Piece {
 
 	@Override
 	boolean makeMove(int toX, int toY, Board board) {
-		Move move = new Move(xCord, yCord, toX, toY);
+		Move move = new Move(xCord, yCord, toX, toY, this);
 		if(!alive()) {
 			return false;
 		}

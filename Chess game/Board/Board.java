@@ -28,7 +28,7 @@ public class Board implements Cloneable{
 		}
 	}	
 	public void updatePieces(int fromX,int fromY,int toX,int toY,Piece piece) {
-		lastMove = new Move(fromX, fromY, toX, toY);
+		lastMove = new Move(fromX, fromY, toX, toY, piece);
 		lastPieceMoved = piece;
 		if(pieces[toX][toY] != null) {
 			died = pieces[toX][toY];
@@ -52,6 +52,9 @@ public class Board implements Cloneable{
 		lastPieceMoved.setYcord(lastMove.getFromY());
 		
 		if(died != null) {
+			piecesList.add(died);
+			Game.AllPieces.add(died);
+			Game.fillPieces();
 			pieces[lastMove.getToX()][lastMove.getToY()] = died;
 			grid[lastMove.getToX()][lastMove.getToY()] = died.getValueInTheboard();
 			died.setXcord(lastMove.getToX());

@@ -140,6 +140,14 @@ public class Game {
 			checkLegalMoves(p);
 		}
 	}
+	
+	public void check2() {
+		List<Move> movesToRemove = new ArrayList<Move>();
+		Board clonedBoard = board.getNewBoard();
+		for(Move m: allPlayersMove) {
+			clonedBoard.updatePieces(0, 0, 0, 0, active);
+		}
+	}
 
 	public static void checkLegalMoves(Piece piece) {
 		List<Move> movesToRemove = new ArrayList<Move>();

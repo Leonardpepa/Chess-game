@@ -19,7 +19,7 @@ public class King extends Piece {
 	}
 	
 	public boolean makeMove(int x, int y, Board board) {
-		Move move = new Move(xCord, yCord, x, y);
+		Move move = new Move(xCord, yCord, x, y, this);
 		if(!alive()) {
 			return false;
 		}
