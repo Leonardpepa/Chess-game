@@ -4,6 +4,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -74,6 +76,18 @@ public class Game {
 		checkMate();
 	}
 
+	public void randomPlay() {
+		if(!player) {
+			Random r = new Random();
+			active = bPieces.get(r.nextInt(bPieces.size()));				
+			while(active.getMoves().isEmpty()) {
+				active = bPieces.get(r.nextInt(bPieces.size()));				
+			}
+			Move m = active.getMoves().get(r.nextInt(active.getMoves().size()));				
+			move(m.getToX(), m.getToY());
+		}
+	}
+	
 	public void selectPiece(int x, int y) {
 		if (active == null && board.getPiece(x, y) != null && board.getPiece(x, y).isWhite() == player) {
 			active = board.getPiece(x, y);
@@ -184,9 +198,9 @@ public class Game {
 			if (active.makeMove(x, y, board)) {
 				tryToPromote(active);
 				changeSide();
+				active = null;
 			}
 			drag = false;
-			active = null;
 		}
 	}
 	
