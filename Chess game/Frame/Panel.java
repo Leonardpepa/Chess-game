@@ -40,6 +40,8 @@ public class Panel extends JPanel {
 				Game.drag = false;
 				game.active = null;
 				game.selectPiece(x, y);
+				revalidate();
+				repaint();
 			}
 		}
 		
@@ -54,6 +56,8 @@ public class Panel extends JPanel {
 			else {
 				setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 			}
+			revalidate();
+			repaint();
 		}
 		
 		@Override
@@ -67,6 +71,8 @@ public class Panel extends JPanel {
 				xx = e.getX();
 				yy = e.getY();				
 			}
+			revalidate();
+			repaint();
 		}
 		
 		@Override
@@ -74,6 +80,8 @@ public class Panel extends JPanel {
 			int x = e.getX() / Piece.size;
 			int y = e.getY() / Piece.size;
 			game.move(x, y);
+			revalidate();
+			repaint();
 		}
 
 	}

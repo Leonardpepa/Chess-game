@@ -1,12 +1,13 @@
 
 public class Move implements Comparable<Move>{
 	int fromX, fromY, toX, toY;
-
-	public Move(int fromX, int fromY, int toX, int toY) {
+	Piece piece;
+	public Move(int fromX, int fromY, int toX, int toY, Piece piece) {
 		this.fromX = fromX;
 		this.fromY = fromY;
 		this.toX = toX;
 		this.toY = toY;
+		this.piece = piece;
 	}
 
 	public int getFromX() {
@@ -39,6 +40,16 @@ public class Move implements Comparable<Move>{
 
 	public void setToY(int toY) {
 		this.toY = toY;
+	}
+	
+	
+
+	public Piece getPiece() {
+		return piece;
+	}
+
+	public void setPiece(Piece piece) {
+		this.piece = piece;
 	}
 
 	@Override

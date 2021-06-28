@@ -21,7 +21,7 @@ public abstract class Piece implements Cloneable{
 	protected Image  image;
 	
 	boolean makeMove(int toX, int toY, Board board) {
-		Move move = new Move(xCord, yCord, toX, toY);
+		Move move = new Move(xCord, yCord, toX, toY, this);
 		if(!alive()) {
 			return false;
 		}
@@ -108,7 +108,7 @@ public abstract class Piece implements Cloneable{
 		for(int i=0; i<8; i++) {
 			for(int j=0; j<8; j++) {
 				if(canMove(i, j, b)) {
-					moves.add(new Move(xCord, yCord, i, j));
+					moves.add(new Move(xCord, yCord, i, j, this));
 				}
 			}
 		}
