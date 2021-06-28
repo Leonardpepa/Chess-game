@@ -5,7 +5,6 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -26,13 +25,14 @@ public class Game {
 
 	static List<Move> allPlayersMove = new ArrayList<Move>();
 	static List<Move> allEnemysMove = new ArrayList<Move>();
-	
+	private boolean gameOver = false;
+
 	public Game() {
 		new PieceImages();
 		loadFenPosition("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 		start();
 	}
-	
+
 	public void start() {
 		fillPieces();
 		generatePlayersTurnMoves(board);
@@ -77,64 +77,66 @@ public class Game {
 	}
 
 	public void randomPlay() {
-		if(!player) {
+		if (gameOver) {
+			return;
+		}
+		if (!player) {
 			Random r = new Random();
-			active = bPieces.get(r.nextInt(bPieces.size()));				
-			while(active.getMoves().isEmpty()) {
-				active = bPieces.get(r.nextInt(bPieces.size()));				
+			active = bPieces.get(r.nextInt(bPieces.size()));
+			while (active.getMoves().isEmpty()) {
+				active = bPieces.get(r.nextInt(bPieces.size()));
 			}
-			Move m = active.getMoves().get(r.nextInt(active.getMoves().size()));				
+			Move m = active.getMoves().get(r.nextInt(active.getMoves().size()));
 			move(m.getToX(), m.getToY());
 		}
 	}
-	
+
 	public void selectPiece(int x, int y) {
 		if (active == null && board.getPiece(x, y) != null && board.getPiece(x, y).isWhite() == player) {
 			active = board.getPiece(x, y);
 		}
 	}
-	
+
 	public void checkMate() {
-		if(player) {
-			for(Piece p: wPieces) {
-				if(!p.getMoves().isEmpty()) {
+		if (player) {
+			for (Piece p : wPieces) {
+				if (!p.getMoves().isEmpty()) {
 					return;
 				}
 			}
-		}else {
-			for(Piece p: bPieces) {
-				if(!p.getMoves().isEmpty()) {
+		} else {
+			for (Piece p : bPieces) {
+				if (!p.getMoves().isEmpty()) {
 					return;
 				}
 			}
 		}
-		if(player) {
-			if(wk.isInCheck()){
-				JOptionPane.showMessageDialog(null,"check mate " + (!player ? "white" : "black") + " wins");				
-			}else {
-				JOptionPane.showMessageDialog(null,"stalemate ");				
-				
+		if (player) {
+			if (wk.isInCheck()) {
+				JOptionPane.showMessageDialog(null, "check mate " + (!player ? "white" : "black") + " wins");
+			} else {
+				JOptionPane.showMessageDialog(null, "stalemate ");
+
+			}
+		} else {
+			if (bk.isInCheck()) {
+				JOptionPane.showMessageDialog(null, "check mate " + (!player ? "white" : "black") + " wins");
+			} else {
+				JOptionPane.showMessageDialog(null, "stalemate ");
+
 			}
 		}
-		else {
-			if(bk.isInCheck()){
-				JOptionPane.showMessageDialog(null,"check mate " + (!player ? "white" : "black") + " wins");				
-			}else {
-				JOptionPane.showMessageDialog(null,"stalemate ");				
-				
-			}
-		}
+		gameOver = true;
 	}
-	
-	public static void checkPlayersLegalMoves(){
-		List<Piece> pieces  = null;
-		if(player) {
+
+	public static void checkPlayersLegalMoves() {
+		List<Piece> pieces = null;
+		if (player) {
 			pieces = wPieces;
+		} else {
+			pieces = bPieces;
 		}
-		else{
-			 pieces = bPieces;
-		}
-		for(Piece p: pieces) {
+		for (Piece p : pieces) {
 			checkLegalMoves(p);
 		}
 	}
@@ -143,46 +145,49 @@ public class Game {
 		List<Move> movesToRemove = new ArrayList<Move>();
 		Board clonedBoard = board.getNewBoard();
 		Piece clonedActive = piece.getClone();
-		
-		for(Move move: clonedActive.getMoves()) {
+
+		for (Move move : clonedActive.getMoves()) {
 			clonedBoard = board.getNewBoard();
 			clonedActive = piece.getClone();
-			
+
 			clonedActive.makeMove(move.getToX(), move.getToY(), clonedBoard);
-			
+
 			List<Piece> enemyPieces = new ArrayList<Piece>();
 			Piece king = null;
-			
-			if(piece.isWhite) {
+
+			if (piece.isWhite) {
 				enemyPieces = bPieces;
 				king = wk;
-			}
-			else {
+			} else {
 				enemyPieces = wPieces;
 				king = bk;
 			}
-			
+
 			for (Piece enemyP : enemyPieces) {
-				
+
 				Piece clonedEnemyPiece = enemyP.getClone();
 				clonedEnemyPiece.fillAllPseudoLegalMoves(clonedBoard);
-				
+
 				for (Move bMove : clonedEnemyPiece.getMoves()) {
-					if ( !(clonedActive instanceof King) && bMove.getToX() == king.getXcord() && bMove.getToY() == king.getYcord() && clonedBoard.getGrid()[enemyP.getXcord()][enemyP.getYcord()] == enemyP.getValueInTheboard()) {
+					if (!(clonedActive instanceof King) && bMove.getToX() == king.getXcord()
+							&& bMove.getToY() == king.getYcord()
+							&& clonedBoard.getGrid()[enemyP.getXcord()][enemyP.getYcord()] == enemyP
+									.getValueInTheboard()) {
 						movesToRemove.add(move);
-					}
-					else if(clonedActive instanceof King) {
-						if(bMove.getToX() == clonedActive.getXcord() && bMove.getToY() == clonedActive.getYcord() && clonedBoard.getGrid()[enemyP.getXcord()][enemyP.getYcord()] == enemyP.getValueInTheboard()) {
+					} else if (clonedActive instanceof King) {
+						if (bMove.getToX() == clonedActive.getXcord() && bMove.getToY() == clonedActive.getYcord()
+								&& clonedBoard.getGrid()[enemyP.getXcord()][enemyP.getYcord()] == enemyP
+										.getValueInTheboard()) {
 							movesToRemove.add(move);
 						}
 					}
 				}
 
 			}
-			
+
 		}
-		
-		for(Move move : movesToRemove) {
+
+		for (Move move : movesToRemove) {
 			piece.getMoves().remove(move);
 		}
 	}
@@ -203,25 +208,25 @@ public class Game {
 			drag = false;
 		}
 	}
-	
+
 	public void drawKingInCheck(boolean isWhite, Graphics g, JPanel panel) {
 		g.setColor(Color.RED);
-		if(isWhite && wk.isInCheck()) {
-			g.drawRect(wk.getXcord()*Piece.size, wk.getYcord()*Piece.size, Piece.size, Piece.size);
-		}else if(bk.isInCheck()) {
-			g.drawRect(bk.getXcord()*Piece.size, bk.getYcord()*Piece.size, Piece.size, Piece.size);
+		if (isWhite && wk.isInCheck()) {
+			g.drawRect(wk.getXcord() * Piece.size, wk.getYcord() * Piece.size, Piece.size, Piece.size);
+		} else if (bk.isInCheck()) {
+			g.drawRect(bk.getXcord() * Piece.size, bk.getYcord() * Piece.size, Piece.size, Piece.size);
 		}
 		panel.revalidate();
 		panel.repaint();
 	}
-	
+
 	public void drawBoard(Graphics g) {
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
 				if ((i + j) % 2 == 1) {
 					g.setColor(new Color(118, 150, 86));
 				} else {
-					g.setColor(new Color(238, 238,210));
+					g.setColor(new Color(238, 238, 210));
 				}
 				g.fillRect(i * Piece.size, j * Piece.size, Piece.size, Piece.size);
 			}
@@ -231,9 +236,20 @@ public class Game {
 	public void tryToPromote(Piece p) {
 		if (p instanceof Pawn) {
 			if (((Pawn) p).madeToTheEnd()) {
-				PromotionFrame.popUpPieces(p.pieceColor, p);
+				choosePiece(p, showMessageForPromotion());
 			}
 		}
+	}
+
+	public int showMessageForPromotion() {
+		Object[] options = { "Queen", "Rook", "Knight", "Bishop" };
+
+		drag = false;
+		return JOptionPane.showOptionDialog(null, // parent container of JOptionPane
+				"Choose Piece To Promote too", null, JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
+				null, // do not use a custom Icon
+				options, // the titles of buttons
+				options[0]);// default button title
 	}
 
 	public static void choosePiece(Piece p, int choice) {
@@ -242,7 +258,7 @@ public class Game {
 			AllPieces.remove(p);
 			p = new Queen(p.getXcord(), p.getYcord(), p.isWhite(), board, p.isWhite() ? 8 : -8);
 			AllPieces.add(p);
-			
+
 			break;
 		case 1:
 			AllPieces.remove(p);
