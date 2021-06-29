@@ -2,6 +2,7 @@
 public class Rook extends Piece {
 
 	private boolean hasMoved;
+	private boolean justMoved = false;
 
 	public Rook(int x, int y, boolean iswhite, Board board, int value) {
 		super(x, y, iswhite, board, value);
@@ -22,6 +23,11 @@ public class Rook extends Piece {
 	@Override
 	boolean makeMove(int toX, int toY, Board board) {
 		if(super.makeMove(toX, toY, board)) {
+			if(!hasMoved) {
+				justMoved = true;
+			}else {
+				justMoved = false;
+			}
 			hasMoved = true;
 			return true;
 		}
@@ -92,6 +98,14 @@ public class Rook extends Piece {
 
 	public void setHasMoved(boolean hasMoved) {
 		this.hasMoved = hasMoved;
+	}
+
+	public boolean isJustMoved() {
+		return justMoved;
+	}
+
+	public void setJustMoved(boolean justMoved) {
+		this.justMoved = justMoved;
 	}
 
 }

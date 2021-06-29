@@ -1,5 +1,8 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
+
+import javax.swing.JPanel;
 
 public class Board implements Cloneable{
 	public static final int ROWS = 8;
@@ -10,7 +13,11 @@ public class Board implements Cloneable{
 	public Piece lastPieceMoved;
 	public Move lastMove;
 	public Piece died;
+	
+	public Stack<Move> lastMoves = new Stack<>();
+	public Stack<Piece> deadPieces = new  Stack<>();
 	public  List<Piece> piecesList = new ArrayList<Piece>();
+	
 	public Board() {
 		grid = new int[ROWS][COLUMNS];
 		pieces = new Piece[ROWS][COLUMNS];
@@ -29,12 +36,15 @@ public class Board implements Cloneable{
 	}	
 	public void updatePieces(int fromX,int fromY,int toX,int toY,Piece piece) {
 		lastMove = new Move(fromX, fromY, toX, toY, piece);
-		lastPieceMoved = piece;
+		lastMoves.add(lastMove);
 		if(pieces[toX][toY] != null) {
 			died = pieces[toX][toY];
+			deadPieces.add(died);
 			piecesList.remove(died);
 			Game.AllPieces.remove(died);
 			Game.fillPieces();
+		}else {
+			deadPieces.add(null);
 		}
 		grid[fromX][fromY] = 0;
 		grid[toX][toY] =  piece.getValueInTheboard();
@@ -43,25 +53,44 @@ public class Board implements Cloneable{
 	}
 	
 	public void undoMove() {
-		
-		if(lastMove == null) return;
-		
-		pieces[lastMove.getFromX()][lastMove.getFromY()] = lastPieceMoved;
-		grid[lastMove.getFromX()][lastMove.getFromY()] = lastPieceMoved.getValueInTheboard();
-		lastPieceMoved.setXcord(lastMove.getFromX());
-		lastPieceMoved.setYcord(lastMove.getFromY());
-		
-		if(died != null) {
-			piecesList.add(died);
-			Game.AllPieces.add(died);
-			Game.fillPieces();
-			pieces[lastMove.getToX()][lastMove.getToY()] = died;
-			grid[lastMove.getToX()][lastMove.getToY()] = died.getValueInTheboard();
-			died.setXcord(lastMove.getToX());
-			died.setYcord(lastMove.getToY());
+		if(!lastMoves.isEmpty()) {
+			Move move = lastMoves.pop();
+			Piece dead = deadPieces.pop();
+			grid[move.fromX][move.fromY] = move.getPiece().getValueInTheboard();
+			pieces[move.fromX][move.fromY] = move.getPiece();
+			
+			move.getPiece().setXcord(move.fromX);
+			move.getPiece().setYcord(move.fromY);
+			
+			if(move.getPiece() instanceof Pawn) {
+				if(move.getPiece().getYcord() == (move.getPiece().isWhite() ? 6 : 1)) {
+					((Pawn)	move.getPiece()).setFirstMove(true);
+				}
+			}
+			
+			if(move.getPiece() instanceof Rook) {
+				if(((Rook) move.getPiece()).isJustMoved()) {
+					((Rook) move.getPiece()).setHasMoved(false);
+					((Rook) move.getPiece()).setJustMoved(false);
+				}
+			}
+			
+			
+			if(dead != null) {
+				Game.AllPieces.add(dead);
+				Game.fillPieces();
+				grid[move.toX][move.toY] = dead.getValueInTheboard();
+				pieces[move.toX][move.toY] = dead;
+				dead.setXcord(move.getToX());
+				dead.setYcord(move.getToY());
+			}
+			else {
+				grid[move.toX][move.toY] = 0;
+				pieces[move.toX][move.toY] = dead;
+			}
+			Game.changeSide();
 		}
-		
-		
+		return;
 	}
 	
 	public Piece getPiece(int x,int y) {

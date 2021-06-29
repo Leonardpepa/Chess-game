@@ -25,7 +25,7 @@ public class Game {
 
 	static List<Move> allPlayersMove = new ArrayList<Move>();
 	static List<Move> allEnemysMove = new ArrayList<Move>();
-	private boolean gameOver = false;
+	private static boolean gameOver = false;
 
 	public Game() {
 		new PieceImages();
@@ -68,7 +68,7 @@ public class Game {
 		}
 	}
 
-	public void changeSide() {
+	public static void changeSide() {
 		player = !player;
 		generateEnemysMoves(board);
 		generatePlayersTurnMoves(board);
@@ -97,7 +97,7 @@ public class Game {
 		}
 	}
 
-	public void checkMate() {
+	public static void checkMate() {
 		if (player) {
 			for (Piece p : wPieces) {
 				if (!p.getMoves().isEmpty()) {

@@ -2,6 +2,8 @@
 
 import java.awt.Cursor;
 import java.awt.Graphics;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -14,11 +16,19 @@ public class Panel extends JPanel {
 	Game game;
 	int ti,tj;
 	public static int xx, yy;
+	JPanel panel = this;
 	
 	Panel(){
 		this.setFocusable(true);
 		this.addMouseListener(new Listener());
 		this.addMouseMotionListener(new Listener());
+		this.addKeyListener(new KeyAdapter() {
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == 37) {
+					Game.board.undoMove();
+				}
+			}
+		});
 		game = new Game();
 
 	}
