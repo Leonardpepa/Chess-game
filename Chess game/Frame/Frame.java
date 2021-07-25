@@ -8,8 +8,6 @@ public class Frame extends JFrame {
 	public static final int HEIGTH = 640;
 	
 	public Frame() {
-		
-		
 		this.setContentPane(new  Panel());
 		this.setTitle("Chess");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -18,7 +16,6 @@ public class Frame extends JFrame {
 		this.getContentPane().setPreferredSize(new Dimension(WIDTH,WIDTH));
 		this.pack();
 		this.setLocationRelativeTo(null);
-		
 	}
 	
 	

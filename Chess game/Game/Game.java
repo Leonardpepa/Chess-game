@@ -245,11 +245,8 @@ public class Game {
 		Object[] options = { "Queen", "Rook", "Knight", "Bishop" };
 
 		drag = false;
-		return JOptionPane.showOptionDialog(null, // parent container of JOptionPane
-				"Choose Piece To Promote too", null, JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
-				null, // do not use a custom Icon
-				options, // the titles of buttons
-				options[0]);// default button title
+		return JOptionPane.showOptionDialog(null, "Choose Piece To Promote to", null, JOptionPane.YES_NO_CANCEL_OPTION,
+				JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 	}
 
 	public static void choosePiece(Piece p, int choice) {
