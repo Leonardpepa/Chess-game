@@ -1,9 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-
-import javax.swing.JPanel;
-
 public class Board implements Cloneable{
 	public static final int ROWS = 8;
 	public static final int COLUMNS = 8;

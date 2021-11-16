@@ -1,9 +1,5 @@
 import java.awt.Color;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
 public class PieceImages {
 	 	static Color WHITECOLOR = Color.WHITE;
@@ -15,35 +11,31 @@ public class PieceImages {
 		static String 	QUEEN = "♛";
 		static String  KING = "♚";
 		
-		static BufferedImage wk;
-		static BufferedImage bk;
-		static BufferedImage wr;
-		static BufferedImage br;
-		static BufferedImage wq;
-		static BufferedImage bq;
-		static BufferedImage wb;
-		static BufferedImage bb;
-		static BufferedImage wn;
-		static BufferedImage bn;
-		static BufferedImage wp;
-		static BufferedImage bp;
+		static ImageIcon wk;
+		static ImageIcon bk;
+		static ImageIcon wr;
+		static ImageIcon br;
+		static ImageIcon wq;
+		static ImageIcon bq;
+		static ImageIcon wb;
+		static ImageIcon bb;
+		static ImageIcon wn;
+		static ImageIcon bn;
+		static ImageIcon wp;
+		static ImageIcon bp;
 		
 		public PieceImages() {
-			try {
-				wk = ImageIO.read(new File(new File("images/wk.png").getCanonicalPath()));
-				bk = ImageIO.read(new File(new File("images/bk.png").getCanonicalPath()));
-				wr = ImageIO.read(new File(new File("images/wr.png").getCanonicalPath()));
-				br = ImageIO.read(new File(new File("images/br.png").getCanonicalPath()));
-				wq = ImageIO.read(new File(new File("images/wq.png").getCanonicalPath()));
-				bq = ImageIO.read(new File(new File("images/bq.png").getCanonicalPath()));
-				wb = ImageIO.read(new File(new File("images/wb.png").getCanonicalPath()));
-				bb = ImageIO.read(new File(new File("images/bb.png").getCanonicalPath()));
-				wn = ImageIO.read(new File(new File("images/wn.png").getCanonicalPath()));
-				bn = ImageIO.read(new File(new File("images/bn.png").getCanonicalPath()));
-				wp = ImageIO.read(new File(new File("images/wp.png").getCanonicalPath()));
-				bp = ImageIO.read(new File(new File("images/bp.png").getCanonicalPath()));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			wk = new ImageIcon(getClass().getResource("resources/images/wk.png"));
+			bk = new ImageIcon(getClass().getResource("resources/images/bk.png"));
+			wr = new ImageIcon(getClass().getResource("resources/images/wr.png"));
+			br = new ImageIcon(getClass().getResource("resources/images/br.png"));
+			wq = new ImageIcon(getClass().getResource("resources/images/wq.png"));
+			bq = new ImageIcon(getClass().getResource("resources/images/bq.png"));
+			wb = new ImageIcon(getClass().getResource("resources/images/wb.png"));
+			bb = new ImageIcon(getClass().getResource("resources/images/bb.png"));
+			wn = new ImageIcon(getClass().getResource("resources/images/wn.png"));
+			bn = new ImageIcon(getClass().getResource("resources/images/bn.png"));
+			wp = new ImageIcon(getClass().getResource("resources/images/wp.png"));
+			bp = new ImageIcon(getClass().getResource("resources/images/bp.png"));
 		}
 }

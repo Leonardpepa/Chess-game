@@ -1,10 +1,10 @@
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 public abstract class Piece implements Cloneable{
@@ -18,7 +18,7 @@ public abstract class Piece implements Cloneable{
 	protected Color pieceColor;
 	static int size = 80;
 	protected List<Move> moves = new ArrayList<>();
-	protected Image  image;
+	protected ImageIcon  image;
 	
 	boolean makeMove(int toX, int toY, Board board) {
 		Move move = new Move(xCord, yCord, toX, toY, this);
@@ -92,13 +92,13 @@ public abstract class Piece implements Cloneable{
 	
 	
 	public void draw(Graphics g, boolean drag, JPanel panel) {
-			g.drawImage(image, xCord*Piece.size, yCord*Piece.size, Piece.size, Piece.size, panel);
+			g.drawImage(image.getImage(), xCord*Piece.size, yCord*Piece.size, Piece.size, Piece.size, panel);
 			panel.revalidate();
 			panel.repaint();
 	}
 	
 	public void draw2(Graphics g, boolean player, int x, int y, JPanel panel) {
-			g.drawImage(image, x - Piece.size/2, y- Piece.size/2, Piece.size, Piece.size, panel);
+			g.drawImage(image.getImage(), x - Piece.size/2, y- Piece.size/2, Piece.size, Piece.size, panel);
 			panel.revalidate();
 			panel.repaint();
 	}
