@@ -1,3 +1,5 @@
+package com.chessgame.Board;
+import com.chessgame.Pieces.Piece;
 
 public class Move implements Comparable<Move>{
 	int fromX, fromY, toX, toY;

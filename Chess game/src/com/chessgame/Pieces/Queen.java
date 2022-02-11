@@ -1,4 +1,5 @@
-
+package com.chessgame.Pieces;
+import com.chessgame.Board.Board;
 
 public class Queen extends Piece {
 

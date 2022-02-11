@@ -1,3 +1,5 @@
+package com.chessgame.Frame;
+
 import javax.swing.JFrame;
 import java.awt.Dimension;
 

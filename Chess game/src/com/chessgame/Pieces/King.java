@@ -1,3 +1,7 @@
+package com.chessgame.Pieces;
+import com.chessgame.Board.Board;
+import com.chessgame.Board.Move;
+import com.chessgame.Game.Game;
 
 public class King extends Piece {
 	private boolean hasMoved;

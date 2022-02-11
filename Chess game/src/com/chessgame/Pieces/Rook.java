@@ -1,3 +1,5 @@
+package com.chessgame.Pieces;
+import com.chessgame.Board.Board;
 
 public class Rook extends Piece {
 
@@ -21,7 +23,7 @@ public class Rook extends Piece {
 	}
 	
 	@Override
-	boolean makeMove(int toX, int toY, Board board) {
+	public boolean makeMove(int toX, int toY, Board board) {
 		if(super.makeMove(toX, toY, board)) {
 			if(!hasMoved) {
 				justMoved = true;

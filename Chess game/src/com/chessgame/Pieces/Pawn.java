@@ -1,3 +1,7 @@
+package com.chessgame.Pieces;
+import com.chessgame.Board.Board;
+import com.chessgame.Board.Move;
+import com.chessgame.Game.Game;
 
 public class Pawn extends Piece {
 	private boolean firstMove;
@@ -20,7 +24,8 @@ public class Pawn extends Piece {
 	}
 
 	@Override
-	boolean makeMove(int toX, int toY, Board board) {
+	
+	public boolean makeMove(int toX, int toY, Board board) {
 		Move move = new Move(xCord, yCord, toX, toY, this);
 		if(!alive()) {
 			return false;

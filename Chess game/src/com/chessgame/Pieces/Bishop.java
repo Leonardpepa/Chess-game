@@ -1,4 +1,6 @@
+package com.chessgame.Pieces;
 
+import com.chessgame.Board.*;
 
 public class Bishop extends Piece {
 	

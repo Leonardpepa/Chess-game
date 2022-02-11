@@ -1,15 +1,20 @@
+package com.chessgame.Game;
+
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import com.chessgame.Board.Board;
+import com.chessgame.Board.Move;
+import com.chessgame.Pieces.*;
+
 public class Game {
-	static Board board = new Board();
+	public static Board board = new Board();
 
 	static King wk;
 	static King bk;
@@ -17,14 +22,14 @@ public class Game {
 	static ArrayList<Piece> bPieces = new ArrayList<Piece>();
 
 	static boolean player = true;
-	Piece active = null;
+	public Piece active = null;
 	public static boolean drag = false;
-	static ArrayList<Piece> AllPieces = new ArrayList<Piece>();
+	public static ArrayList<Piece> AllPieces = new ArrayList<Piece>();
 
 	ArrayList<Move> allPossiblesMoves = new ArrayList<Move>();
 
 	static List<Move> allPlayersMove = new ArrayList<Move>();
-	static List<Move> allEnemysMove = new ArrayList<Move>();
+	public static List<Move> allEnemysMove = new ArrayList<Move>();
 	private static boolean gameOver = false;
 
 	public Game() {
@@ -155,7 +160,7 @@ public class Game {
 			List<Piece> enemyPieces = new ArrayList<Piece>();
 			Piece king = null;
 
-			if (piece.isWhite) {
+			if (piece.isWhite()) {
 				enemyPieces = bPieces;
 				king = wk;
 			} else {

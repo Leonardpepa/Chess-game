@@ -1,4 +1,4 @@
-
+package com.chessgame.Frame;
 
 import java.awt.Cursor;
 import java.awt.Graphics;
@@ -9,6 +9,9 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+
+import com.chessgame.Game.*;
+import com.chessgame.Pieces.Piece;
 
 public class Panel extends JPanel {
 

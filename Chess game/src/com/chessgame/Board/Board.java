@@ -1,6 +1,9 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
+package com.chessgame.Board;
+
+import java.util.*;
+import com.chessgame.Game.Game;
+import com.chessgame.Pieces.*;
+
 public class Board implements Cloneable{
 	public static final int ROWS = 8;
 	public static final int COLUMNS = 8;

@@ -1,3 +1,4 @@
+package com.chessgame.Pieces;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -6,6 +7,10 @@ import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+
+import com.chessgame.Board.Board;
+import com.chessgame.Board.Move;
+import com.chessgame.Game.Game;
 
 public abstract class Piece implements Cloneable{
 	protected int xCord;
@@ -16,11 +21,11 @@ public abstract class Piece implements Cloneable{
 	protected Board board;
 	protected String pieceImage;
 	protected Color pieceColor;
-	static int size = 80;
+	public static int size = 80;
 	protected List<Move> moves = new ArrayList<>();
 	protected ImageIcon  image;
 	
-	boolean makeMove(int toX, int toY, Board board) {
+	public boolean makeMove(int toX, int toY, Board board) {
 		Move move = new Move(xCord, yCord, toX, toY, this);
 		if(!alive()) {
 			return false;
